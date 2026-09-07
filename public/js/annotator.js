@@ -118,8 +118,19 @@ class Annotator {
   }
 
   _select(id) {
+    // Solo cambia la clase "selected" en el DOM existente -sin volver a
+    // construir los elementos- porque _select() se llama en pleno
+    // mousedown (ver _startDrag) para marcar la anotación clickeada como
+    // seleccionada. Si esto reconstruyera el DOM (como hacia _render()
+    // antes), el navegador perdia el elemento que acababa de recibir el
+    // mousedown y nunca llegaba a disparar click/dblclick sobre el mismo
+    // nodo -por eso el doble clic para editar texto (Tip/Aviso/Importante/
+    // Info, Texto, Etiqueta) no entraba en modo edicion.
+    const prevWrap = this.layer.querySelector('.anno-el.selected');
+    if (prevWrap) prevWrap.classList.remove('selected');
     this.selectedId = id;
-    this._render();
+    const newWrap = id ? this.layer.querySelector(`.anno-el[data-id="${id}"]`) : null;
+    if (newWrap) newWrap.classList.add('selected');
     if (this._onSel) this._onSel(this.getSelected());
   }
 
@@ -292,6 +303,13 @@ class Annotator {
       e.stopPropagation();
       el.contentEditable = 'true';
       el.focus();
+      // Selecciona todo el texto (placeholder incluido) para que escribir
+      // lo reemplace directamente, en vez de insertarse al principio.
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
     });
     el.addEventListener('blur', () => {
       el.contentEditable = 'false';
