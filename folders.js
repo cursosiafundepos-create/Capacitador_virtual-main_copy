@@ -6,15 +6,15 @@ const TEMA_ICONS = {
 };
 
 const TEMA_FOLDER_COLORS = {
-  '': { back: '#00196E', f1: '#0072BC', f2: '#4FA8DE' },
-  'Todos': { back: '#00196E', f1: '#0072BC', f2: '#4FA8DE' },
+  '': { back: '#0a5a5e', f1: '#16A3A0', f2: '#7FE3DC' },
+  'Todos': { back: '#0a5a5e', f1: '#16A3A0', f2: '#7FE3DC' },
   'Sistema Open': { back: '#00568F', f1: '#0072BC', f2: '#4FA8DE' },
   'Salesforce': { back: '#124b6b', f1: '#1E77A8', f2: '#5AA9CE' },
   'Qupos': { back: '#8a5600', f1: '#C97600', f2: '#F0A02C' },
   'MBA Case': { back: '#4a3480', f1: '#6C4FBC', f2: '#9f7fe0' },
   'Agentes de Ayuda': { back: '#8a2b28', f1: '#C13F3B', f2: '#e2726e' },
-  'General': { back: '#384049', f1: '#56636F', f2: '#8593a1' },
-  'Otros': { back: '#384049', f1: '#56636F', f2: '#8593a1' },
+  'General': { back: '#1f6b30', f1: '#2E9E4F', f2: '#7FD08C' },
+  'Otros': { back: '#8a6d00', f1: '#D4A017', f2: '#F5D76E' },
   'Final': { back: '#5c1f66', f1: '#8e3f9c', f2: '#c68ad0' },
   'Prácticas de refuerzo': { back: '#0d5c4a', f1: '#12876c', f2: '#5cc4a8' }
 };
