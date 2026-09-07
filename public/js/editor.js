@@ -10,6 +10,7 @@ const CATEGORY_COLORS = {
 let DOC = null;
 let TRAMITES_AUX = [];
 let CATEGORIAS_AUX = [];
+let GRUPOS_AUX = {}; // { tema: [grupo, grupo, ...] }
 let MANUALES_AUX = [];
 const stepRuntime = new Map(); // stepId -> { annotator, capture }
 
@@ -227,6 +228,7 @@ async function init() {
   DOC = doc;
   TRAMITES_AUX = listado.items;
   CATEGORIAS_AUX = listado.categorias;
+  GRUPOS_AUX = listado.grupos || {};
   MANUALES_AUX = manuales.items;
 
   document.getElementById('app').hidden = false;
@@ -246,9 +248,58 @@ function bindGlobal() {
   });
   document.getElementById('mCategoria').addEventListener('change', (e) => {
     DOC.categoria = e.target.value;
+    DOC.grupo = '';
     document.getElementById('tagColor').value = CATEGORY_COLORS[DOC.categoria] || '#0072BC';
+    renderGrupoSelect();
   });
+  document.getElementById('mGrupo').addEventListener('change', (e) => { DOC.grupo = e.target.value; });
   document.getElementById('mDescripcion').addEventListener('input', (e) => { DOC.descripcion = e.target.value; });
+
+  document.getElementById('mCategoriaNueva').addEventListener('click', () => {
+    const box = document.getElementById('mCategoriaNuevaBox');
+    box.hidden = !box.hidden;
+    if (!box.hidden) document.getElementById('mCategoriaNuevaInput').focus();
+  });
+  document.getElementById('mCategoriaNuevaGuardar').addEventListener('click', async () => {
+    const input = document.getElementById('mCategoriaNuevaInput');
+    const nombre = input.value.trim();
+    if (!nombre) { toast('Escribe el nombre del tema', true); return; }
+    try {
+      const data = await Api.crearCategoria(nombre);
+      CATEGORIAS_AUX = data.items;
+      const sel = document.getElementById('mCategoria');
+      sel.appendChild(new Option(data.nombre, data.nombre));
+      sel.value = data.nombre;
+      DOC.categoria = data.nombre;
+      DOC.grupo = '';
+      document.getElementById('tagColor').value = CATEGORY_COLORS[DOC.categoria] || '#0072BC';
+      renderGrupoSelect();
+      input.value = '';
+      document.getElementById('mCategoriaNuevaBox').hidden = true;
+      toast(`Tema "${data.nombre}" agregado`);
+    } catch (e) { toast(e.message, true); }
+  });
+
+  document.getElementById('mGrupoNuevo').addEventListener('click', () => {
+    const box = document.getElementById('mGrupoNuevoBox');
+    box.hidden = !box.hidden;
+    if (!box.hidden) document.getElementById('mGrupoNuevoInput').focus();
+  });
+  document.getElementById('mGrupoNuevoGuardar').addEventListener('click', async () => {
+    const input = document.getElementById('mGrupoNuevoInput');
+    const nombre = input.value.trim();
+    if (!nombre) { toast('Escribe el nombre del grupo', true); return; }
+    try {
+      const data = await Api.crearGrupo(DOC.categoria, nombre);
+      GRUPOS_AUX = data.items;
+      const sel = document.getElementById('mGrupo');
+      sel.appendChild(new Option(data.nombre, data.nombre, false, true));
+      DOC.grupo = data.nombre;
+      input.value = '';
+      document.getElementById('mGrupoNuevoBox').hidden = true;
+      toast(`Grupo "${data.nombre}" agregado`);
+    } catch (e) { toast(e.message, true); }
+  });
 
   document.getElementById('btnAgregarEtiqueta').addEventListener('click', agregarEtiqueta);
   document.getElementById('tagTexto').addEventListener('keydown', (e) => {
@@ -372,7 +423,15 @@ function renderMeta() {
   sel.innerHTML = '';
   for (const c of CATEGORIAS_AUX) sel.appendChild(new Option(c, c, false, c === DOC.categoria));
   document.getElementById('tagColor').value = CATEGORY_COLORS[DOC.categoria] || '#0072BC';
+  renderGrupoSelect();
   renderEtiquetas();
+}
+
+function renderGrupoSelect() {
+  const sel = document.getElementById('mGrupo');
+  sel.innerHTML = '';
+  sel.appendChild(new Option('Sin grupo', ''));
+  for (const g of (GRUPOS_AUX[DOC.categoria] || [])) sel.appendChild(new Option(g, g, false, g === DOC.grupo));
 }
 
 function renderEtiquetas() {

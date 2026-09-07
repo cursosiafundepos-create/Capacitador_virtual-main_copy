@@ -45,7 +45,29 @@
     <div class="field-row">
       <div class="field">
         <label>Categoría / Sistema</label>
-        <select id="mCategoria"></select>
+        <div style="display:flex;gap:8px">
+          <select id="mCategoria" style="flex:1"></select>
+          <button class="btn small" id="mCategoriaNueva" type="button" title="Agregar un tema/sistema nuevo"><span class="msym" style="font-size:15px">add_circle</span></button>
+        </div>
+        <div class="field" id="mCategoriaNuevaBox" hidden style="margin-top:8px">
+          <div style="display:flex;gap:8px">
+            <input type="text" id="mCategoriaNuevaInput" placeholder="Nombre del tema nuevo" style="flex:1" maxlength="40">
+            <button class="btn small primary" id="mCategoriaNuevaGuardar" type="button">Agregar</button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Grupo / Subcategoría (opcional)</label>
+        <div style="display:flex;gap:8px">
+          <select id="mGrupo" style="flex:1"></select>
+          <button class="btn small" id="mGrupoNuevo" type="button" title="Agregar un grupo nuevo dentro de este tema"><span class="msym" style="font-size:15px">add_circle</span></button>
+        </div>
+        <div class="field" id="mGrupoNuevoBox" hidden style="margin-top:8px">
+          <div style="display:flex;gap:8px">
+            <input type="text" id="mGrupoNuevoInput" placeholder="Nombre del grupo nuevo" style="flex:1" maxlength="40">
+            <button class="btn small primary" id="mGrupoNuevoGuardar" type="button">Agregar</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="field">

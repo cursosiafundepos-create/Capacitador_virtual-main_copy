@@ -53,6 +53,7 @@
       <ul class="tema-list" id="temaList"></ul>
     </aside>
     <section class="tema-content">
+      <div class="grupo-filtros" id="grupoFiltros" hidden></div>
       <div id="grid"></div>
     </section>
   </div>
@@ -67,7 +68,29 @@
     </div>
     <div class="field">
       <label>Categoría / Sistema</label>
-      <select id="nCategoria"></select>
+      <div style="display:flex;gap:8px">
+        <select id="nCategoria" style="flex:1"></select>
+        <button class="btn small" id="nCategoriaNueva" type="button" title="Agregar un tema/sistema nuevo"><span class="msym" style="font-size:15px">add_circle</span></button>
+      </div>
+      <div class="field" id="nCategoriaNuevaBox" hidden style="margin-top:8px">
+        <div style="display:flex;gap:8px">
+          <input type="text" id="nCategoriaNuevaInput" placeholder="Nombre del tema nuevo, ej: Facturación Web" style="flex:1" maxlength="40">
+          <button class="btn small primary" id="nCategoriaNuevaGuardar" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Grupo / Subcategoría (opcional)</label>
+      <div style="display:flex;gap:8px">
+        <select id="nGrupo" style="flex:1"></select>
+        <button class="btn small" id="nGrupoNuevo" type="button" title="Agregar un grupo nuevo dentro de este tema"><span class="msym" style="font-size:15px">add_circle</span></button>
+      </div>
+      <div class="field" id="nGrupoNuevoBox" hidden style="margin-top:8px">
+        <div style="display:flex;gap:8px">
+          <input type="text" id="nGrupoNuevoInput" placeholder="Nombre del grupo nuevo, ej: Créditos" style="flex:1" maxlength="40">
+          <button class="btn small primary" id="nGrupoNuevoGuardar" type="button">Agregar</button>
+        </div>
+      </div>
     </div>
     <div class="field">
       <label>Descripción breve</label>
