@@ -678,6 +678,10 @@ a.card:hover { text-decoration: none; border-color: var(--brand); }
   display: flex; gap: 8px; align-items: flex-start;
 }
 .anno-callout .icon { font-size: 15px; flex-shrink: 0; }
+/* .anno-el hereda user-select:none (para poder arrastrar sin seleccionar
+   texto sin querer); hay que anularlo en los textos editables o el
+   navegador no deja ubicar el cursor ni escribir dentro de ellos. */
+.anno-text, .anno-etiqueta, .anno-callout .txt { user-select: text; cursor: text; }
 .anno-callout.tip { background: var(--ok-light); color: #0d4a2c; border: 1px solid #b6e6cd; }
 .anno-callout.aviso { background: var(--warn-light); color: #6b4400; border: 1px solid #f2d491; }
 .anno-callout.importante { background: var(--danger-light); color: #7a170f; border: 1px solid #f3bcb5; }
@@ -799,18 +803,18 @@ a.card:hover { text-decoration: none; border-color: var(--brand); }
   cursor: pointer; padding-top: 18px;
   animation: temaIn .35s cubic-bezier(.2,.7,.3,1) both;
 }
-.folder-3d { position: relative; width: 100%; max-width: 210px; height: 140px; perspective: 1500px; }
+.folder-3d { position: relative; width: 100%; max-width: 180px; height: 120px; perspective: 1500px; }
 .folder-back {
   position: relative; width: 100%; height: 100%;
-  background: var(--folder-back); border-radius: 14px; border-top-left-radius: 0;
+  background: var(--folder-back); border-radius: 12px; border-top-left-radius: 0;
   transform-origin: top; transition: box-shadow .3s ease;
 }
 .folder-back::after {
-  content: ''; position: absolute; bottom: 99%; left: 0; width: 70px; height: 14px;
-  background: var(--folder-back); border-radius: 14px 14px 0 0;
+  content: ''; position: absolute; bottom: 99%; left: 0; width: 60px; height: 12px;
+  background: var(--folder-back); border-radius: 12px 12px 0 0;
 }
 .folder-back::before {
-  content: ''; position: absolute; top: -13px; left: 66px; width: 14px; height: 14px;
+  content: ''; position: absolute; top: -11px; left: 56px; width: 12px; height: 12px;
   background: var(--folder-back); clip-path: polygon(0 35%, 0% 100%, 50% 100%);
 }
 .folder-item:hover .folder-back { box-shadow: 0 18px 34px rgba(0,0,0,.2); }
@@ -825,17 +829,17 @@ a.card:hover { text-decoration: none; border-color: var(--brand); }
 .folder-item:hover .folder-paper-b { transform: rotateX(-30deg); }
 .folder-item:hover .folder-paper-c { transform: rotateX(-38deg); }
 .folder-front {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 108px;
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 92px;
   background: linear-gradient(0deg, var(--folder-front1), var(--folder-front2));
-  border-radius: 14px; border-top-right-radius: 0; transform-origin: bottom;
+  border-radius: 12px; border-top-right-radius: 0; transform-origin: bottom;
   transition: all .3s ease;
 }
 .folder-front::after {
-  content: ''; position: absolute; bottom: 99%; right: 0; width: 128px; height: 14px;
-  background: var(--folder-front2); border-radius: 14px 14px 0 0;
+  content: ''; position: absolute; bottom: 99%; right: 0; width: 110px; height: 12px;
+  background: var(--folder-front2); border-radius: 12px 12px 0 0;
 }
 .folder-front::before {
-  content: ''; position: absolute; top: -9px; right: 124px; width: 11px; height: 11px;
+  content: ''; position: absolute; top: -8px; right: 106px; width: 9px; height: 9px;
   background: var(--folder-front2); clip-path: polygon(100% 14%, 50% 100%, 100% 100%);
 }
 .folder-item:hover .folder-front {

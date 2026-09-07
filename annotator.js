@@ -222,7 +222,14 @@ class Annotator {
     if (this.editable) {
       wrap.style.pointerEvents = 'auto';
       wrap.addEventListener('mousedown', (e) => this._startDrag(e, wrap, a));
-      wrap.addEventListener('click', (e) => { e.stopPropagation(); this._select(a.id); });
+      wrap.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Si el clic cae sobre el texto en edición (contenteditable), no
+        // reseleccionar/re-renderizar: eso destruiría el elemento editable
+        // en pleno tecleo y expulsaría al usuario del modo edición.
+        if (e.target.isContentEditable) return;
+        this._select(a.id);
+      });
     }
     return wrap;
   }
