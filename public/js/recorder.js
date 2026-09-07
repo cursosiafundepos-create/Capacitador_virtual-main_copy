@@ -65,6 +65,11 @@ class MediaCapture {
         }
       }
       this.stream = stream;
+      // Ni el micrófono ni el audio del sistema se capturaron: sin este aviso
+      // el video queda mudo y nadie se entera hasta reproducirlo.
+      if (typeof toast === 'function' && stream.getAudioTracks().length === 0) {
+        toast('Grabando sin audio: revisá el permiso de micrófono o marcá "Compartir audio" al elegir qué compartir', true);
+      }
     } else if (kind === 'camara') {
       this.stream = await navigator.mediaDevices.getUserMedia({ video: { frameRate: { ideal: 24 } }, audio: true });
     } else {
