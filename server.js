@@ -266,6 +266,7 @@ function listManuales() {
       tipo: f.ext.replace('.', ''),
       titulo: m.titulo || f.name.replace(/\.[^.]+$/, ''),
       categoria: m.categoria || 'General',
+      grupo: m.grupo || '',
       descripcion: m.descripcion || '',
       tags: m.tags || []
     };
@@ -737,7 +738,7 @@ app.get('/api/tramites/:slug/media/:nombre/transcripcion', requireAdmin, (req, r
 // ---------- Manuales ----------
 
 app.get('/api/manuales', (req, res) => {
-  res.json({ items: listManuales() });
+  res.json({ categorias: CATEGORIAS, grupos: GRUPOS, items: listManuales() });
 });
 
 app.get('/api/manuales/contenido', (req, res) => {
@@ -777,9 +778,11 @@ const manualUpload = multer({
 app.post('/api/manuales/upload', requireAdmin, manualUpload.single('archivo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Archivo requerido' });
   const meta = readJSON(MANUALES_META_FILE, {});
+  const categoriaFinal = req.body.categoria && CATEGORIAS.includes(req.body.categoria) ? req.body.categoria : 'General';
   meta[req.file.filename] = {
     titulo: (req.body.titulo || req.file.originalname).trim(),
-    categoria: req.body.categoria || 'General',
+    categoria: categoriaFinal,
+    grupo: req.body.grupo && (GRUPOS[categoriaFinal] || []).includes(req.body.grupo) ? req.body.grupo : '',
     descripcion: req.body.descripcion || '',
     tags: (req.body.tags || '').split(',').map(s => s.trim()).filter(Boolean)
   };
@@ -830,6 +833,7 @@ app.put('/api/manuales/:id', requireAdmin, (req, res) => {
     ...(meta[id] || {}),
     titulo: req.body.titulo,
     categoria: req.body.categoria,
+    grupo: req.body.grupo || '',
     descripcion: req.body.descripcion,
     tags: req.body.tags
   };

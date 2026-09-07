@@ -60,10 +60,29 @@
     </div>
     <div class="field">
       <label>Categoría / Sistema</label>
-      <select id="eCategoria">
-        <option>Sistema Open</option><option>Salesforce</option><option>Qupos</option>
-        <option>MBA Case</option><option>Agentes de Ayuda</option><option>General</option>
-      </select>
+      <div style="display:flex;gap:8px">
+        <select id="eCategoria" style="flex:1"></select>
+        <button class="btn small" id="eCategoriaNueva" type="button" title="Agregar un tema/sistema nuevo"><span class="msym" style="font-size:15px">add_circle</span></button>
+      </div>
+      <div class="field" id="eCategoriaNuevaBox" hidden style="margin-top:8px">
+        <div style="display:flex;gap:8px">
+          <input type="text" id="eCategoriaNuevaInput" placeholder="Nombre del tema nuevo" style="flex:1" maxlength="40">
+          <button class="btn small primary" id="eCategoriaNuevaGuardar" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Grupo / Subcategoría (opcional)</label>
+      <div style="display:flex;gap:8px">
+        <select id="eGrupo" style="flex:1"></select>
+        <button class="btn small" id="eGrupoNuevo" type="button" title="Agregar un grupo nuevo dentro de este tema"><span class="msym" style="font-size:15px">add_circle</span></button>
+      </div>
+      <div class="field" id="eGrupoNuevoBox" hidden style="margin-top:8px">
+        <div style="display:flex;gap:8px">
+          <input type="text" id="eGrupoNuevoInput" placeholder="Nombre del grupo nuevo" style="flex:1" maxlength="40">
+          <button class="btn small primary" id="eGrupoNuevoGuardar" type="button">Agregar</button>
+        </div>
+      </div>
     </div>
     <div class="field">
       <label>Descripción</label>
