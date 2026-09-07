@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { execFile, execFileSync } = require('child_process');
 const express = require('express');
 const multer = require('multer');
@@ -106,12 +107,17 @@ if (!ADMIN_PASSWORD) {
   console.error('Configurala con una contrasena propia antes de arrancar el servidor.\n');
   process.exit(1);
 }
-const adminTokens = new Set();
+// El token se deriva de la contrasena (en vez de generarse al azar y
+// guardarse en un Set en memoria) para que siga siendo valido despues de
+// que el servidor se reinicie o se redespliegue -antes, cada redeploy
+// invalidaba todas las sesiones abiertas y obligaba a volver a loguearse,
+// a veces a mitad de una edicion o una subida en curso.
+const ADMIN_TOKEN = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
 
 function requireAdmin(req, res, next) {
   const auth = req.headers.authorization || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-  if (!token || !adminTokens.has(token)) {
+  if (!token || token !== ADMIN_TOKEN) {
     return res.status(401).json({ error: 'Sesion de administracion invalida o expirada' });
   }
   next();
@@ -829,9 +835,7 @@ app.post('/api/admin/login', (req, res) => {
     return res.status(401).json({ error: 'Contrasena incorrecta' });
   }
   loginIntentos.delete(ip);
-  const token = uuidv4();
-  adminTokens.add(token);
-  res.json({ token });
+  res.json({ token: ADMIN_TOKEN });
 });
 
 // ---------- Empleados ----------
