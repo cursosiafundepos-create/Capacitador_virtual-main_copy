@@ -99,12 +99,12 @@ if (!fs.existsSync(EMPLEADOS_FILE)) {
   fs.writeFileSync(EMPLEADOS_FILE, JSON.stringify([], null, 2));
 }
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'coopelesca2026';
-if (!process.env.ADMIN_PASSWORD) {
-  console.warn('\n*** ALERTA DE SEGURIDAD ***');
-  console.warn('La variable de entorno ADMIN_PASSWORD no esta configurada.');
-  console.warn('Se esta usando la contrasena por defecto del codigo fuente, que es publica en el repositorio.');
-  console.warn('Configura ADMIN_PASSWORD con una contrasena propia antes de usar esto en produccion.\n');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  console.error('\n*** ERROR DE CONFIGURACION ***');
+  console.error('La variable de entorno ADMIN_PASSWORD no esta configurada.');
+  console.error('Configurala con una contrasena propia antes de arrancar el servidor.\n');
+  process.exit(1);
 }
 const adminTokens = new Set();
 
