@@ -1,6 +1,27 @@
 /* Utilidades de captura: pantallazos, grabación de pantalla+audio y de cámara.
    Requiere ejecutarse en localhost o https (APIs getDisplayMedia / getUserMedia). */
 
+// El micrófono capturado en crudo por getUserMedia suele grabarse muy bajo
+// (el navegador no aplica refuerzo por defecto). Esto mezcla todas las
+// pistas de audio de entrada en una sola, subiendo el volumen con un
+// GainNode y usando un compresor para que los picos no se distorsionen.
+// Devuelve la pista de audio ya procesada y el AudioContext (hay que
+// cerrarlo al terminar para no dejarlo colgado).
+function mezclarConGanancia(audioTracks, gananciaDb = 12) {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AudioCtx();
+  const destino = ctx.createMediaStreamDestination();
+  const compresor = ctx.createDynamicsCompressor();
+  compresor.connect(destino);
+  audioTracks.forEach((track) => {
+    const fuente = ctx.createMediaStreamSource(new MediaStream([track]));
+    const ganancia = ctx.createGain();
+    ganancia.gain.value = Math.pow(10, gananciaDb / 20);
+    fuente.connect(ganancia).connect(compresor);
+  });
+  return { track: destino.stream.getAudioTracks()[0], audioContext: ctx };
+}
+
 function pickMime() {
   const candidates = [
     'video/webm;codecs=vp9,opus',
@@ -49,20 +70,27 @@ class MediaCapture {
         video: { frameRate: { ideal: 15, max: 20 } },
         audio: opts.audioSistema !== false
       });
-      let stream = displayStream;
+      let audioTracks = [...displayStream.getAudioTracks()];
       if (opts.mic) {
         try {
           const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          const combined = new MediaStream([
-            ...displayStream.getVideoTracks(),
-            ...micStream.getAudioTracks(),
-            ...displayStream.getAudioTracks()
-          ]);
-          stream = combined;
+          audioTracks.push(...micStream.getAudioTracks());
           this._micStream = micStream;
         } catch (e) {
           console.warn('No se pudo capturar el micrófono, se graba solo pantalla', e);
         }
+      }
+      let stream;
+      if (audioTracks.length) {
+        // Varias pistas de audio sueltas en un mismo MediaStream no se mezclan
+        // de forma confiable entre navegadores -MediaRecorder suele quedarse
+        // solo con la primera-, así que se combinan explícitamente acá.
+        const { track: mezclada, audioContext } = mezclarConGanancia(audioTracks);
+        this._audioContext = audioContext;
+        this._inputAudioTracks = audioTracks;
+        stream = new MediaStream([...displayStream.getVideoTracks(), mezclada]);
+      } else {
+        stream = displayStream;
       }
       this.stream = stream;
       // Ni el micrófono ni el audio del sistema se capturaron: sin este aviso
@@ -71,7 +99,16 @@ class MediaCapture {
         toast('Grabando sin audio: revisá el permiso de micrófono o marcá "Compartir audio" al elegir qué compartir', true);
       }
     } else if (kind === 'camara') {
-      this.stream = await navigator.mediaDevices.getUserMedia({ video: { frameRate: { ideal: 24 } }, audio: true });
+      const camStream = await navigator.mediaDevices.getUserMedia({ video: { frameRate: { ideal: 24 } }, audio: true });
+      const audioTracks = camStream.getAudioTracks();
+      if (audioTracks.length) {
+        const { track: mezclada, audioContext } = mezclarConGanancia(audioTracks);
+        this._audioContext = audioContext;
+        this.stream = new MediaStream([...camStream.getVideoTracks(), mezclada]);
+        this._micStream = camStream;
+      } else {
+        this.stream = camStream;
+      }
     } else {
       throw new Error('Tipo de captura desconocido');
     }
@@ -123,5 +160,7 @@ class MediaCapture {
   _cleanupTracks() {
     if (this.stream) this.stream.getTracks().forEach(t => t.stop());
     if (this._micStream) this._micStream.getTracks().forEach(t => t.stop());
+    if (this._inputAudioTracks) this._inputAudioTracks.forEach(t => t.stop());
+    if (this._audioContext) { this._audioContext.close(); this._audioContext = null; }
   }
 }
