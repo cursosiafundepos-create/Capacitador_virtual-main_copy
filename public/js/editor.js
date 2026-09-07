@@ -431,6 +431,7 @@ function renderSteps() {
     stepEl.querySelector('[data-eliminar-paso]').addEventListener('click', async () => {
       const ok = await confirmDialog('¿Eliminar este paso?', { titulo: 'Eliminar paso' });
       if (!ok) return;
+      PendingUploads.remove(`${DOC.id}:${paso.id}`).catch(() => {});
       DOC.pasos.splice(idx, 1);
       renderSteps();
     });
@@ -547,6 +548,7 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
   const btnShot = stepEl.querySelector('[data-accion="pantallazo"]');
   const btnPausar = stepEl.querySelector('[data-accion="pausar"]');
   const btnDetener = stepEl.querySelector('[data-accion="detener"]');
+  const btnReintentarSubida = stepEl.querySelector('[data-accion="reintentar-subida"]');
   const indicador = stepEl.querySelector('[data-indicador]');
   const indicadorTexto = stepEl.querySelector('[data-indicador-texto]');
   const inputVideo = stepEl.querySelector('[data-subir="video"]');
@@ -635,18 +637,48 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
       setPausado(true);
     }
   });
-  btnDetener.addEventListener('click', async () => {
-    const blob = await capture.stop();
-    setRecording(false);
-    if (!blob || !blob.size) return;
+  // Si la subida falla (ej: la sesion de administrador expiro justo al
+  // terminar de grabar, porque el servidor se reinicio), la grabacion no se
+  // descarta: se guarda en este navegador (IndexedDB) con una clave fija por
+  // paso, para poder reintentar la subida despues sin volver a grabar -aunque
+  // la persona recargue la pagina para volver a ingresar la contrasena.
+  const pendingUploadId = `${DOC.id}:${paso.id}`;
+
+  async function intentarSubirGrabacion(blob, filename) {
     toast('Subiendo grabación...');
     try {
-      const res = await Api.uploadMedia(DOC.id, blob, `paso-${Date.now()}.webm`, (msg) => toast(msg));
+      const res = await Api.uploadMedia(DOC.id, blob, filename, (msg) => toast(msg));
       paso.media = { tipo: 'video', src: res.src };
       renderStageMedia(stage, paso);
       actualizarBotonTranscribir();
       toast(mensajeSubida('Grabación guardada en el paso', res));
-    } catch (e) { toast(e.message, true); }
+      btnReintentarSubida.hidden = true;
+      PendingUploads.remove(pendingUploadId).catch(() => {});
+    } catch (e) {
+      toast(e.message, true);
+      try {
+        await PendingUploads.save({ id: pendingUploadId, filename, blob });
+        btnReintentarSubida.hidden = false;
+        toast('La grabación quedó guardada en este navegador: usá "Reintentar subida" para no tener que grabar de nuevo.', true);
+      } catch (e2) { /* IndexedDB no disponible: no hay mas remedio que re-grabar */ }
+    }
+  }
+
+  btnReintentarSubida.addEventListener('click', async () => {
+    const rec = await PendingUploads.get(pendingUploadId).catch(() => null);
+    if (!rec) { toast('No se encontró la grabación pendiente en este navegador.', true); btnReintentarSubida.hidden = true; return; }
+    await intentarSubirGrabacion(rec.blob, rec.filename);
+  });
+
+  PendingUploads.get(pendingUploadId).then((rec) => {
+    if (rec) btnReintentarSubida.hidden = false;
+  }).catch(() => {});
+
+  btnDetener.addEventListener('click', async () => {
+    const blob = await capture.stop();
+    setRecording(false);
+    if (!blob || !blob.size) return;
+    await intentarSubirGrabacion(blob, `paso-${Date.now()}.webm`);
   });
 
   btnShot.addEventListener('click', async () => {
