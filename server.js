@@ -188,6 +188,30 @@ function agregarCategoria(nombre) {
   return limpio;
 }
 
+// Cada tema/sistema puede dividirse en grupos (subcategorias) propios -por
+// ejemplo "Sistema Open" agrupando "Caja", "Creditos", "Ahorros", etc. Se
+// guardan aparte de CATEGORIAS, como un mapa tema -> lista de grupos, para
+// poder agregar grupos nuevos a un tema sin tocar el codigo.
+const GRUPOS_FILE = path.join(DATA_DIR, 'grupos.json');
+let GRUPOS;
+GRUPOS = readJSON(GRUPOS_FILE, null) || {};
+if (!fs.existsSync(GRUPOS_FILE)) writeJSON(GRUPOS_FILE, GRUPOS);
+
+function agregarGrupo(tema, nombre) {
+  const temaLimpio = (tema || '').trim();
+  const limpio = (nombre || '').trim();
+  if (!temaLimpio || !CATEGORIAS.includes(temaLimpio)) throw new Error('El tema indicado no existe');
+  if (!limpio) throw new Error('El nombre del grupo es requerido');
+  if (limpio.length > 40) throw new Error('El nombre del grupo es demasiado largo');
+  const lista = GRUPOS[temaLimpio] || (GRUPOS[temaLimpio] = []);
+  if (lista.some(g => g.toLowerCase() === limpio.toLowerCase())) {
+    throw new Error('Ya existe un grupo con ese nombre en este tema');
+  }
+  lista.push(limpio);
+  writeJSON(GRUPOS_FILE, GRUPOS);
+  return limpio;
+}
+
 function listTramites() {
   if (!fs.existsSync(TRAMITES_DIR)) return [];
   return fs.readdirSync(TRAMITES_DIR, { withFileTypes: true })
@@ -200,6 +224,7 @@ function listTramites() {
         id: doc.id,
         titulo: doc.titulo,
         categoria: doc.categoria,
+        grupo: doc.grupo || '',
         descripcion: doc.descripcion,
         actualizado: doc.actualizado,
         pasos: (doc.pasos || []).length,
@@ -345,10 +370,24 @@ app.post('/api/categorias', requireAdmin, (req, res) => {
   }
 });
 
+app.get('/api/grupos', (req, res) => {
+  res.json({ items: GRUPOS });
+});
+
+app.post('/api/grupos', requireAdmin, (req, res) => {
+  try {
+    const { tema, nombre } = req.body || {};
+    const nombreCreado = agregarGrupo(tema, nombre);
+    res.status(201).json({ items: GRUPOS, tema: (tema || '').trim(), nombre: nombreCreado });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // ---------- Trámites ----------
 
 app.get('/api/tramites', (req, res) => {
-  res.json({ categorias: CATEGORIAS, items: listTramites() });
+  res.json({ categorias: CATEGORIAS, grupos: GRUPOS, items: listTramites() });
 });
 
 app.get('/api/tramites/:slug', (req, res) => {
@@ -363,7 +402,7 @@ app.get('/api/tramites/:slug', (req, res) => {
 });
 
 app.post('/api/tramites', requireAdmin, (req, res) => {
-  const { titulo, categoria, descripcion } = req.body || {};
+  const { titulo, categoria, grupo, descripcion } = req.body || {};
   if (!titulo || !titulo.trim()) return res.status(400).json({ error: 'Titulo requerido' });
 
   let base = slugify(titulo);
@@ -376,10 +415,12 @@ app.post('/api/tramites', requireAdmin, (req, res) => {
   fs.mkdirSync(path.join(dir, 'media'), { recursive: true });
 
   const now = new Date().toISOString();
+  const categoriaFinal = categoria && CATEGORIAS.includes(categoria) ? categoria : 'General';
   const doc = {
     id: slug,
     titulo: titulo.trim(),
-    categoria: categoria && CATEGORIAS.includes(categoria) ? categoria : 'General',
+    categoria: categoriaFinal,
+    grupo: grupo && (GRUPOS[categoriaFinal] || []).includes(grupo) ? grupo : '',
     descripcion: descripcion || '',
     creado: now,
     actualizado: now,

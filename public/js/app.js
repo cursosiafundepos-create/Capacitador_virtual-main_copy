@@ -1,16 +1,17 @@
 let TRAMITES = [];
 let CATEGORIAS = [];
+let GRUPOS = {}; // { tema: [grupo, grupo, ...] }
 let temaActivo = null; // null = ningún tema abierto todavía; '' = "Todos" abierto explícitamente
+let grupoActivo = null; // null = todos los grupos del tema; '__sin__' = sin grupo; string = grupo puntual
 
 async function init() {
   const data = await Api.listTramites();
   TRAMITES = data.items;
   CATEGORIAS = data.categorias;
+  GRUPOS = data.grupos || {};
 
-  const selNuevo = document.getElementById('nCategoria');
-  for (const c of CATEGORIAS) {
-    selNuevo.appendChild(new Option(c, c));
-  }
+  poblarSelectCategoria();
+  poblarSelectGrupo();
 
   renderTemas();
   render();
@@ -20,6 +21,65 @@ async function init() {
   document.getElementById('nCancelar').addEventListener('click', () => toggleModal(false));
   document.getElementById('nCrear').addEventListener('click', crear);
   document.getElementById('btnSalir').addEventListener('click', salir);
+
+  document.getElementById('nCategoria').addEventListener('change', poblarSelectGrupo);
+
+  document.getElementById('nCategoriaNueva').addEventListener('click', () => {
+    const box = document.getElementById('nCategoriaNuevaBox');
+    box.hidden = !box.hidden;
+    if (!box.hidden) document.getElementById('nCategoriaNuevaInput').focus();
+  });
+  document.getElementById('nCategoriaNuevaGuardar').addEventListener('click', async () => {
+    const input = document.getElementById('nCategoriaNuevaInput');
+    const nombre = input.value.trim();
+    if (!nombre) { toast('Escribe el nombre del tema', true); return; }
+    try {
+      const data = await Api.crearCategoria(nombre);
+      CATEGORIAS = data.items;
+      const sel = document.getElementById('nCategoria');
+      sel.appendChild(new Option(data.nombre, data.nombre, false, true));
+      input.value = '';
+      document.getElementById('nCategoriaNuevaBox').hidden = true;
+      poblarSelectGrupo();
+      renderTemas();
+      toast(`Tema "${data.nombre}" agregado`);
+    } catch (e) { toast(e.message, true); }
+  });
+
+  document.getElementById('nGrupoNuevo').addEventListener('click', () => {
+    const box = document.getElementById('nGrupoNuevoBox');
+    box.hidden = !box.hidden;
+    if (!box.hidden) document.getElementById('nGrupoNuevoInput').focus();
+  });
+  document.getElementById('nGrupoNuevoGuardar').addEventListener('click', async () => {
+    const input = document.getElementById('nGrupoNuevoInput');
+    const nombre = input.value.trim();
+    if (!nombre) { toast('Escribe el nombre del grupo', true); return; }
+    const tema = document.getElementById('nCategoria').value;
+    try {
+      const data = await Api.crearGrupo(tema, nombre);
+      GRUPOS = data.items;
+      const sel = document.getElementById('nGrupo');
+      sel.appendChild(new Option(data.nombre, data.nombre, false, true));
+      input.value = '';
+      document.getElementById('nGrupoNuevoBox').hidden = true;
+      toast(`Grupo "${data.nombre}" agregado`);
+    } catch (e) { toast(e.message, true); }
+  });
+}
+
+function poblarSelectCategoria() {
+  const sel = document.getElementById('nCategoria');
+  sel.innerHTML = '';
+  for (const c of CATEGORIAS) sel.appendChild(new Option(c, c));
+}
+
+function poblarSelectGrupo() {
+  const sel = document.getElementById('nGrupo');
+  const tema = document.getElementById('nCategoria').value;
+  sel.innerHTML = '';
+  sel.appendChild(new Option('Sin grupo', ''));
+  for (const g of (GRUPOS[tema] || [])) sel.appendChild(new Option(g, g));
 }
 
 function salir() {
@@ -39,9 +99,10 @@ async function crear() {
   const titulo = document.getElementById('nTitulo').value.trim();
   if (!titulo) { toast('Escribe un título', true); return; }
   const categoria = document.getElementById('nCategoria').value;
+  const grupo = document.getElementById('nGrupo').value;
   const descripcion = document.getElementById('nDescripcion').value.trim();
   try {
-    const doc = await Api.createTramite({ titulo, categoria, descripcion });
+    const doc = await Api.createTramite({ titulo, categoria, grupo, descripcion });
     window.location.href = `/editor.html?id=${encodeURIComponent(doc.id)}`;
   } catch (e) {
     toast(e.message, true);
@@ -67,6 +128,7 @@ function renderTemas() {
   list.querySelectorAll('.folder-item').forEach(li => {
     li.addEventListener('click', () => {
       temaActivo = li.dataset.cat;
+      grupoActivo = null;
       renderTemas();
       render();
     });
@@ -84,6 +146,7 @@ function cardHtml(t) {
         <div class="tc-glass">
           <div class="tc-content">
             <span class="pill" data-cat="${escapeHtml(t.categoria)}">${escapeHtml(t.categoria)}</span>
+            ${t.grupo ? `<span class="pill outline">${escapeHtml(t.grupo)}</span>` : ''}
             ${tags ? `<div class="tag-row">${tags}</div>` : ''}
             <span class="tc-title">${escapeHtml(t.titulo)}</span>
             <span class="tc-text">${escapeHtml(t.descripcion || 'Sin descripción')}</span>
@@ -109,12 +172,62 @@ function cardHtml(t) {
   `;
 }
 
+function grupoChipHtml(value, label, count, active) {
+  return `<button class="grupo-chip${active ? ' act' : ''}" type="button" data-grupo="${escapeHtml(value)}">${escapeHtml(label)} <span class="count">${count}</span></button>`;
+}
+
+// Chips para filtrar/ordenar los trámites de un tema puntual por su grupo
+// (subcategoría). "itemsTema" ya viene filtrado por tema y búsqueda.
+function renderGrupoFiltros(tema, itemsTema) {
+  const bar = document.getElementById('grupoFiltros');
+  const gruposTema = GRUPOS[tema] || [];
+  if (!gruposTema.length) {
+    bar.hidden = true;
+    bar.innerHTML = '';
+    grupoActivo = null;
+    return;
+  }
+
+  const sinGrupo = itemsTema.filter(t => !t.grupo).length;
+  const chips = [grupoChipHtml('', 'Todos', itemsTema.length, grupoActivo === null)]
+    .concat(gruposTema.map(g => grupoChipHtml(g, g, itemsTema.filter(t => t.grupo === g).length, grupoActivo === g)));
+  if (sinGrupo) chips.push(grupoChipHtml('__sin__', 'Sin grupo', sinGrupo, grupoActivo === '__sin__'));
+
+  bar.innerHTML = chips.join('') +
+    `<button class="grupo-chip add" type="button" id="btnGrupoNuevoInline"><span class="msym">add_circle</span> Nuevo grupo</button>`;
+  bar.hidden = false;
+
+  bar.querySelectorAll('[data-grupo]').forEach(el => {
+    el.addEventListener('click', () => {
+      grupoActivo = el.dataset.grupo === '' ? null : el.dataset.grupo;
+      render();
+    });
+  });
+  document.getElementById('btnGrupoNuevoInline').addEventListener('click', async () => {
+    await adminGuard();
+    const nombre = await promptDialog(`Nombre del grupo nuevo dentro de "${tema}":`, {
+      titulo: 'Nuevo grupo', placeholder: 'Ej: Créditos', confirmarTexto: 'Agregar'
+    });
+    if (!nombre) return;
+    try {
+      const data = await Api.crearGrupo(tema, nombre);
+      GRUPOS = data.items;
+      grupoActivo = data.nombre;
+      render();
+      toast(`Grupo "${data.nombre}" agregado`);
+    } catch (e) { toast(e.message, true); }
+  });
+}
+
 function render() {
   const q = document.getElementById('buscar').value.toLowerCase();
   const grid = document.getElementById('grid');
+  const grupoBar = document.getElementById('grupoFiltros');
   const conocidas = new Set(CATEGORIAS);
 
   if (temaActivo === null && !q) {
+    grupoBar.hidden = true;
+    grupoBar.innerHTML = '';
     grid.innerHTML = `
       <div class="tema-placeholder">
         <span class="msym">arrow_back</span>
@@ -126,10 +239,24 @@ function render() {
   }
 
   const temaEfectivo = temaActivo === null ? '' : temaActivo;
-  const items = TRAMITES.filter(t => {
+  const itemsTema = TRAMITES.filter(t => {
     const matchQ = !q || t.titulo.toLowerCase().includes(q) || (t.descripcion || '').toLowerCase().includes(q);
     const matchC = !temaEfectivo || (temaEfectivo === 'Otros' ? !conocidas.has(t.categoria) : t.categoria === temaEfectivo);
     return matchQ && matchC;
+  });
+
+  if (temaEfectivo && temaEfectivo !== 'Otros') {
+    renderGrupoFiltros(temaEfectivo, itemsTema);
+  } else {
+    grupoBar.hidden = true;
+    grupoBar.innerHTML = '';
+    grupoActivo = null;
+  }
+
+  const items = itemsTema.filter(t => {
+    if (grupoActivo === null) return true;
+    if (grupoActivo === '__sin__') return !t.grupo;
+    return t.grupo === grupoActivo;
   });
 
   if (!items.length) {

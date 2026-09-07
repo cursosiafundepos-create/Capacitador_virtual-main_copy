@@ -27,6 +27,21 @@ const Api = {
     if (!r.ok) throw new Error(data.error || 'No se pudo crear el tema');
     return data;
   },
+  async listGrupos() {
+    const r = await fetch('/api/grupos');
+    return r.json();
+  },
+  async crearGrupo(tema, nombre) {
+    const r = await fetch('/api/grupos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...adminHeaders() },
+      body: JSON.stringify({ tema, nombre })
+    });
+    await checkAdminAuth(r);
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'No se pudo crear el grupo');
+    return data;
+  },
   async listTramites() {
     const r = await fetch('/api/tramites');
     return r.json();
@@ -403,6 +418,48 @@ function confirmDialog(mensaje, opts) {
     backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(false); });
     document.addEventListener('keydown', onKey);
     backdrop.querySelector('[data-confirm-ok]').focus();
+  });
+}
+
+/* Pide un texto corto dentro de la app (reemplaza al prompt() nativo del
+   navegador). Devuelve el texto ingresado, o null si se cancela. */
+function promptDialog(mensaje, opts) {
+  opts = opts || {};
+  return new Promise((resolve) => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = `
+      <div class="modal" style="max-width:420px">
+        <h2>${escapeHtml(opts.titulo || 'Agregar')}</h2>
+        <p style="color:var(--text-dim);margin:0 0 10px">${escapeHtml(mensaje)}</p>
+        <input type="text" class="prompt-input" maxlength="${opts.maxlength || 40}" placeholder="${escapeHtml(opts.placeholder || '')}">
+        <div class="modal-actions">
+          <button class="btn" data-prompt-cancelar>Cancelar</button>
+          <button class="btn primary" data-prompt-ok>${escapeHtml(opts.confirmarTexto || 'Agregar')}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(backdrop);
+    const input = backdrop.querySelector('.prompt-input');
+
+    function close(result) {
+      document.removeEventListener('keydown', onKey);
+      backdrop.remove();
+      resolve(result);
+    }
+    function submit() {
+      const v = input.value.trim();
+      if (!v) { input.focus(); return; }
+      close(v);
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') close(null);
+      if (e.key === 'Enter') { e.preventDefault(); submit(); }
+    }
+    backdrop.querySelector('[data-prompt-cancelar]').addEventListener('click', () => close(null));
+    backdrop.querySelector('[data-prompt-ok]').addEventListener('click', submit);
+    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(null); });
+    document.addEventListener('keydown', onKey);
+    input.focus();
   });
 }
 
