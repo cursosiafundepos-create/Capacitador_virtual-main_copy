@@ -16,7 +16,7 @@ async function init() {
   render();
 
   document.getElementById('buscar').addEventListener('input', render);
-  document.getElementById('btnNuevo').addEventListener('click', () => toggleModal(true));
+  document.getElementById('btnNuevo').addEventListener('click', () => adminGuard().then(() => toggleModal(true)));
   document.getElementById('nCancelar').addEventListener('click', () => toggleModal(false));
   document.getElementById('nCrear').addEventListener('click', crear);
   document.getElementById('btnSalir').addEventListener('click', salir);
@@ -168,6 +168,7 @@ function render() {
 
   grid.querySelectorAll('[data-del]').forEach(btn => {
     btn.addEventListener('click', async () => {
+      await adminGuard();
       const ok = await confirmDialog('¿Eliminar este trámite y todos sus archivos? Esta acción no se puede deshacer.', { titulo: 'Eliminar trámite' });
       if (!ok) return;
       try {
