@@ -610,8 +610,26 @@ app.get('/api/tramites/:slug/media/:nombre/estado', (req, res) => {
 const MEDIA_NAME_RE = /^[a-zA-Z0-9_.-]+$/;
 // slug/nombre -> { done, error?, segmentos? }. Se guarda entre pedidos
 // (no se borra al leerla) para no tener que retranscribir cada vez que
-// se recarga la pagina del editor.
+// se recarga la pagina del editor. Esto es solo cache en memoria: el
+// resultado final tambien se persiste en disco (ver transcripcionesFile)
+// para no perderlo cuando el proceso se reinicia (deploy, crash, etc.).
 const transcriptionJobs = new Map();
+
+function transcripcionesFile(slug) {
+  return path.join(tramitePath(slug), 'transcripciones.json');
+}
+
+function leerTranscripcionGuardada(slug, nombre) {
+  const data = readJSON(transcripcionesFile(slug), {});
+  return data[nombre] || null;
+}
+
+function guardarTranscripcion(slug, nombre, job) {
+  const file = transcripcionesFile(slug);
+  const data = readJSON(file, {});
+  data[nombre] = job;
+  writeJSON(file, data);
+}
 
 function segundosDesdeTimestamp(ts) {
   const [h, m, s] = ts.split(':');
@@ -629,14 +647,16 @@ function parsearTranscripcion(texto) {
   return segmentos;
 }
 
-function transcribirEnSegundoPlano(jobKey, mediaPath) {
+function transcribirEnSegundoPlano(jobKey, slug, nombre, mediaPath) {
   nodewhisper(mediaPath, {
     modelName: WHISPER_MODEL,
     autoDownloadModelName: WHISPER_MODEL,
     whisperOptions: { outputInText: false, language: 'es' }
   })
     .then((resultado) => {
-      transcriptionJobs.set(jobKey, { done: true, segmentos: parsearTranscripcion(resultado) });
+      const job = { done: true, segmentos: parsearTranscripcion(resultado) };
+      transcriptionJobs.set(jobKey, job);
+      guardarTranscripcion(slug, nombre, job);
     })
     .catch((e) => {
       console.warn('No se pudo transcribir el audio:', e.message);
@@ -655,14 +675,14 @@ app.post('/api/tramites/:slug/media/:nombre/transcribir', requireAdmin, (req, re
   const existente = transcriptionJobs.get(jobKey);
   if (existente && !existente.done) return res.json({ iniciado: true });
   transcriptionJobs.set(jobKey, { done: false });
-  transcribirEnSegundoPlano(jobKey, mediaPath);
+  transcribirEnSegundoPlano(jobKey, slug, nombre, mediaPath);
   res.json({ iniciado: true });
 });
 
 app.get('/api/tramites/:slug/media/:nombre/transcripcion', requireAdmin, (req, res) => {
   const { slug, nombre } = req.params;
   if (!MEDIA_NAME_RE.test(nombre)) return res.status(400).json({ error: 'Nombre de archivo invalido' });
-  const job = transcriptionJobs.get(`${slug}/${nombre}`);
+  const job = transcriptionJobs.get(`${slug}/${nombre}`) || leerTranscripcionGuardada(slug, nombre);
   if (!job) return res.json({ done: false, iniciada: false });
   res.json({ ...job, iniciada: true });
 });
