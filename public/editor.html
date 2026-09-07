@@ -135,6 +135,7 @@
         <button class="btn small" data-accion="dictar" title="Dictá y el texto se agrega a la descripción de este paso"><span class="msym" style="font-size:16px">mic</span> Dictar notas por voz</button>
         <button class="btn small" data-accion="pausar" hidden><span class="msym" style="font-size:16px">pause_circle</span> Pausar</button>
         <button class="btn small danger" data-accion="detener" hidden><span class="msym" style="font-size:16px">stop_circle</span> Detener grabación</button>
+        <button class="btn small" data-accion="reintentar-subida" hidden title="La grabación anterior no se pudo subir, pero quedó guardada en este navegador"><span class="msym" style="font-size:16px">cloud_upload</span> Reintentar subida</button>
         <span class="rec-indicator" data-indicador><span class="dot"></span> <span data-indicador-texto>Grabando...</span></span>
         <span class="rec-indicator voz" data-dictado-indicador><span class="dot"></span> Escuchando... hablá con claridad</span>
       </div>
@@ -186,6 +187,7 @@
 
 <script src="/js/api.js"></script>
 <script src="/js/admin-auth.js"></script>
+<script src="/js/pending-uploads.js"></script>
 <script src="/js/recorder.js"></script>
 <script src="/js/annotator.js"></script>
 <script src="/js/editor.js"></script>
