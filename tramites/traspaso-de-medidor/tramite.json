@@ -1,0 +1,37 @@
+{
+  "id": "traspaso-de-medidor",
+  "titulo": "Traspaso de medidor",
+  "categoria": "Sistema Open",
+  "grupo": "Medidores y Servicio Eléctrico",
+  "descripcion": "Cambio de titularidad de un medidor entre asociados.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "mf9ubmhi",
+      "titulo": "Tres escenarios",
+      "texto": "<ul><li>Ambas partes se presentan a firmar (el que traspasa y quien recibe).</li><li>Venta de propiedad: se hace de forma manual, dando hasta 15 días para que el nuevo dueño se presente a firmar; si no lo hace, se repite el trámite o debe reclamarlo directamente.</li><li>Cesión de derechos por otras causales (ej. Fondo Mutual).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Traspaso de medidor"
+    },
+    {
+      "id": "8ckaaqzk",
+      "titulo": "Dos formas de ejecutarlo en CCGAC",
+      "texto": "<ul><li>\"Cesión de Derechos\": traspasa TODO el contrato (haya o no deuda). Se anota en observaciones y se agrega la cédula de quien recibe.</li><li>\"Cambio de contrato\" (sin deuda) o \"Cambio de contrato con deuda\": traspasa el medidor a un contrato ya creado para el nuevo dueño. Si hay deuda, esta debe cancelarse antes de continuar (no es obligatorio que esté vencida, pero si lo está, se cancela primero).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Traspaso de medidor"
+    },
+    {
+      "id": "gr09zy24",
+      "titulo": "Requisito previo al cambio de contrato",
+      "texto": "<p><strong>&#9888; Antes de hacer el \"Cambio de contrato\" debe existir ya un contrato nuevo creado para quien recibirá el medidor (vía \"Venta de servicios de ingeniería\" en su perfil), y la dirección debe ser similar y estar georreferenciada correctamente.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Traspaso de medidor"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SALESFORCE"
+  ]
+}

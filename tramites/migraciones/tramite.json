@@ -1,0 +1,40 @@
+{
+  "id": "migraciones",
+  "titulo": "Migraciones",
+  "categoria": "Sistema Open",
+  "grupo": "Infocomunicaciones (Internet y TV)",
+  "descripcion": "Cambios de red dentro del mismo hogar.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "frucj82q",
+      "titulo": "Definición",
+      "texto": "<p>Una migración es un cambio de red en el mismo hogar (por ejemplo, mejorar la posición o tipo de red del internet que ya tiene el asociado).</p>",
+      "anotaciones": [],
+      "seccion": "Migraciones"
+    },
+    {
+      "id": "8ehbevif",
+      "titulo": "Validar disponibilidad en tres sistemas",
+      "texto": "<ul><li>ArcGIS y CODISP para ver disponibilidad de red — Importante: NO se debe reservar el espacio en Codisp.</li><li>IECRT en Smartflex confirma mejor la disponibilidad y posición (a veces ArcGIS dice que sí hay disponibilidad y Codisp dice que no; IECRT resuelve la duda). Se usa el código de red 1008 o 1018 y se revisan las posiciones libres del divisor.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Migraciones"
+    },
+    {
+      "id": "3gzp62r5",
+      "titulo": "En Salesforce y CCGAC",
+      "texto": "<ul><li>Categoría \"Cambio de condiciones\"; SIEMPRE marcar \"Atención inmediata\".</li><li>En observaciones siempre debe ir: #posición, #DOP y los datos de contacto del asociado.</li><li>En CCGAC → \"Venta y gestión de productos\": se mantiene el mismo plan y solo cambian los componentes técnicos (flecha roja = se quita, punto rojo = se agrega).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Migraciones"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "ArcGIS",
+    "CODISP",
+    "IECRT",
+    "CORCAO"
+  ]
+}

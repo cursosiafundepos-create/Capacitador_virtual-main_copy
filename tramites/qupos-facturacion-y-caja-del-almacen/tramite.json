@@ -1,0 +1,110 @@
+{
+  "id": "qupos-facturacion-y-caja-del-almacen",
+  "titulo": "QUPOS: facturación y caja del almacén",
+  "categoria": "Qupos",
+  "grupo": "Sistemas y Códigos",
+  "descripcion": "Sistema de facturación, créditos, notas de crédito y cierre de caja del almacén/ferretería. Sustituye a MBACASE.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "79b9cyqd",
+      "titulo": "¿Qué es QUPOS y qué reemplaza?",
+      "texto": "<p><strong>&#9888; QUPOS es el sistema de Ventas, procesos y facturación del almacén/ferretería de Coopelesca. Sustituyó a MBACASE: toda gestión de facturación, créditos corrientes, financiamientos, notas de crédito, estado de cuenta y cierre de caja del almacén se realiza ahora en QUPOS.</strong></p>",
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "tlrkedie",
+      "titulo": "Apertura de caja",
+      "texto": "<p>Se ingresa al sistema en Ventas, procesos y facturación → se le da \"Siguiente\" y luego \"Terminar\" en las pantallas iniciales. Se despliega la pantalla de facturación para iniciar la facturación diaria.</p>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023406-apertura.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "vo4ejrxt",
+      "titulo": "Proceso de facturación",
+      "texto": "<ul><li>En Facturación → \"Prof/Prev/Ap\" (Ctrl+F5) se ven las preventas pendientes de cobrar; se filtra por el nombre del asociado y se selecciona (F4 o doble clic).</li><li>Se revisa la factura con artículos, cantidades, precios y total, se marca \"Facturar\".</li><li>Formas de pago disponibles: Transferencia (se anota número de transacción, cuenta y banco), Efectivo, Dólares, Tarjeta (número de voucher), Mixto (combina varias formas o usa ingresos anticipados) y A crédito (solo Enter para imprimir).</li><li>Nota: toda transferencia o Sinpe recibido se debe subir también a Control de caja → Depósitos bancarios → Nuevo → Caja general local.</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023406-facturacion.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "i8zzal9i",
+      "titulo": "Abonos, ingresos anticipados y devoluciones",
+      "texto": "<ul><li>Abonos a créditos corrientes: Facturación → \"+Abonos\" → se busca al cliente → se elige la factura o se distribuye el monto entre varias → se define la forma de pago.</li><li>Ingresos anticipados (dinero a favor): Facturación → \"+Abono\" → \"Nuevo ingreso\"; se llena la información y se copian las notas también en \"descripción\"; forma de pago \"ajustar\".</li><li>Devolución de anticipados: Facturación → \"+Abono\" → \"Nueva devolución\", para retirar dinero a favor que el asociado ya no va a usar.</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023406-abonos.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "xujcvtic",
+      "titulo": "Estado de cuenta",
+      "texto": "<p>Muestra los ingresos anticipados y las facturas a crédito corriente del asociado. Se accede desde la pantalla principal buscando con la lupa (este paso cambió recientemente en el sistema). Es la pantalla clave para revisar deudas en trámites como el Fondo Mutual.</p>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023406-estadocuenta.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "wo62k44a",
+      "titulo": "Notas de crédito y anulación de facturas",
+      "texto": "<ul><li>Nota de crédito (\"devolución simple\"): Facturación → Opciones → Nota de crédito. Toda nota de crédito se convierte en efectivo. Se anota número de factura y fecha, se marcan los artículos a devolver; si el dinero NO se entrega se marca \"genera ingreso anticipado\".</li><li>Anulación de facturas: SOLO se pueden anular facturas del MISMO día y que fueron pagadas en efectivo. Si fue con otra forma de pago, se recomienda hacer nota de crédito para no anular vouchers. Se requieren las tres facturas físicas (blanca, rosada, amarilla) y autorización del líder.</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023407-notascredito.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "mvjrcm0w",
+      "titulo": "Proceso de cierre de caja en QUPOS",
+      "texto": "<ul><li>1) Control de cajas: se filtra por fecha, cajero y estado \"Abierta\" para ver lo facturado en efectivo, vouchers y transferencias.</li><li>2) Retiro del efectivo sobrante (sobre el fondo base de ¢200.000): se llena la boleta del banco y se hace el retiro en el sistema (Facturación → Opciones → Retiro), con la justificación (depósito + número de boleta). Debe registrarse también en Depósitos bancarios.</li><li>3) Se descarga el reporte (Control de cajas → Imprimir → Reporte F4) en PDF para adjuntarlo al cierre.</li><li>4) Facturación → Opciones → Cierre: se edita el cierre con el fondo de caja en ¢200.000, la cantidad de transferencias y vouchers, y se compara contra el reporte de Control de caja antes de confirmar.</li><li>5) Se verifica en Control de cajas con estado \"Cerrada\" que no quede ninguna diferencia (todo en cero).</li><li>Si hay un error en el retiro, se puede corregir con \"Reintegro\" (Facturación → Opciones → Reintegro), siempre con autorización del líder.</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023407-cierre.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "rdw4taj5",
+      "titulo": "Consultas y mantenimiento de clientes",
+      "texto": "<ul><li>Consultas de facturas: Ventas → Consultas → Ventas por facturas; permite reenviar la factura electrónica por correo o reimprimirla desde Edición.</li><li>Clientes/Asociado y apertura de crédito corriente: Ventas → Mantenimiento → Clientes; el monto del crédito corriente se autoriza a solicitud del líder.</li><li>Exoneraciones y configuración tributaria: Ventas → Mantenimiento → Clientes → Opciones de configuración. Ahí van los documentos de exoneración (AL/exonet) y los de agropecuarios, ley 9635 y zonas francas.</li><li>Cambio de nombre de factura: se usa cuando el asociado pide corregir el nombre por error de facturación o motivos personales; se selecciona \"Cliente\" → \"Yes\" y se busca el nombre o código correcto.</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023407-clientes.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    },
+    {
+      "id": "5f0lx0az",
+      "titulo": "Financiamientos",
+      "texto": "<p>Se gestionan desde \"Preventas\" (bodega Ferretería/almacén, modalidad mayoreo) → se abre la preventa con su número → \"Crear financiamiento\" → se elige el servicio/contrato, se generan los planes y se revisa la prima (si no aplica, se corrige a 0 o se autoriza \"prima menor\" con justificación) → se factura desde Prof/Preventa.</p>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/qupos-facturacion-y-caja-del-almacen/media/1788970023407-financiamientos.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "QUPOS: facturación y caja del almacén"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "QUPOS"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "venta-e-instalacion-de-medidores",
+  "titulo": "Venta e instalación de medidores",
+  "categoria": "Sistema Open",
+  "grupo": "Medidores y Servicio Eléctrico",
+  "descripcion": "Requisitos, cálculo de corriente y proceso completo de venta de medidor.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "hw4l2zms",
+      "titulo": "Tipos de medidor",
+      "texto": "<p>Plataforma vende 4 tipos: Residencial y Comercial (los más frecuentes), Industrial y Prepago (este último se deriva a otro departamento).</p>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "wchizr41",
+      "titulo": "Requisitos por tipo",
+      "texto": "<ul><li>Residencial: inspección técnica (si hay duda de disponibilidad), plano catastro, boleta eléctrica CFIA (o declaración de carga sin excepción), aporte de capital ¢40.000.</li><li>Comercial: inspección técnica, plano catastro, boleta eléctrica (la declaración de carga solo aplica en ciertos casos), estudio de factibilidad en algunos comercios, aporte de capital ¢60.000.</li><li>Siempre: cédula del dueño registral de la propiedad (o autorización notarial), validar el dueño en el Registro Nacional, número de poste o medidor cercano.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "kca6ltmf",
+      "titulo": "Declaración de carga",
+      "texto": "<ul><li>Si no hay boleta eléctrica sellada por el CFIA, se hace la declaración de carga: cuesta ¢28.250 para residencial.</li><li>Para comercial sí se necesita la boleta eléctrica para validar el uso y el voltaje.</li><li>En la declaración se marcan los dispositivos electrónicos hasta un total de carga instalada de 15.000–16.000 (máximo).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "j0irkmi9",
+      "titulo": "Cálculo de corriente (clave técnica)",
+      "texto": "<ul><li>Se toma la potencia de la boleta eléctrica, diseño de acometida o plano.</li><li>Corriente (A) = Potencia (VA) ÷ 240.</li><li>Ejemplo: 23 kVA → 23.000 ÷ 240 = 95,83 A → cabe en una base clase 100 (paquete básico).</li><li>Este cálculo NO aplica para cargas trifásicas.</li><li>Base CL100/CL125 soporta hasta 100 A (paquete básico de medidor). Por encima de 200 A el medidor pasa a ser CL20.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "bt6prdv6",
+      "titulo": "Documentos que firma el asociado",
+      "texto": "<ul><li>Declaración de carga, declaración de área, autorización de materiales y contrato de venta de servicio de energía (normalmente 4 firmas).</li><li>3 documentos = presenta boleta eléctrica. 5 documentos = lleva materiales. 7 documentos = no presenta plano ni postura.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "llk71k9u",
+      "titulo": "Cobro (FAGFI y CAGCA)",
+      "texto": "<ul><li>En FAGFI, \"diseño de planos eléctricos\" (declaración de carga) usa el código 2705, con código de IVA 700.</li><li>Luego se abre caja en CAGCA y se cobra por \"Pagos por factura\" con el número de contrato.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    },
+    {
+      "id": "zeqhr8ep",
+      "titulo": "Reglas técnicas frecuentes (preguntas y respuestas de campo)",
+      "texto": "<ul><li>No se puede instalar un tercer medidor con paquete en tubo Hg si ya existe postura doble en el sitio, sin adecuaciones civiles/eléctricas.</li><li>Si el interruptor principal (breaker) del plano supera 100 A, no aplica el paquete estándar: se debe generar una oportunidad de venta de servicios de Ingeniería, no una inspección estándar.</li><li>La inspección de medidor SIEMPRE debe registrarse con el medidor o poste más cercano al sitio real: el sistema es georreferenciado y una orden con referencia equivocada envía a la cuadrilla al lugar incorrecto.</li><li>Cuando se crea una orden nueva a partir de una anterior, siempre se deben copiar las notas y observaciones previas; de lo contrario se pierde el contexto en campo.</li><li>Un edificio debe tener una sola acometida, salvo excepciones autorizadas (sistemas contra incendio, emergencia, distintos tipos de servicio, propiedades extensas, mayor confiabilidad).</li><li>Servicio trifásico: lleva plano eléctrico, tres transformadores (va casi siempre ligado a un proyecto de redes eléctricas) y base de medidor especial; no aplica el paquete de tubo Hg.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta e instalación de medidores"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "ArcGIS",
+    "FAGFI",
+    "QUPOS",
+    "CAGCA"
+  ]
+}

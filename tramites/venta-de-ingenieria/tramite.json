@@ -1,0 +1,30 @@
+{
+  "id": "venta-de-ingenieria",
+  "titulo": "Venta de ingeniería",
+  "categoria": "Sistema Open",
+  "grupo": "Servicios de Ingeniería",
+  "descripcion": "Servicios de ingeniería con causales/actividades por código.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "7pc7et5e",
+      "titulo": "Idea general",
+      "texto": "<p>Los pasos son los mismos si el trámite se hace dentro del mismo contrato; lo que cambia es el TIPO de venta que el ejecutivo busca por medio de un código de actividad, según la situación del asociado. Si se crea un contrato nuevo, cambia un poco la parte de creación del contrato.</p>",
+      "anotaciones": [],
+      "seccion": "Venta de ingeniería"
+    },
+    {
+      "id": "iwbxzp4t",
+      "titulo": "Flujo",
+      "texto": "<ul><li>Salesforce: categoría \"Venta de ingeniería\", subcategoría según el tipo de venta; en observaciones siempre: #poste, #medidor, #plano, otras señas y teléfono de contacto.</li><li>CCGAC: \"Venta de ingeniería\" (contrato nuevo o existente); se busca la actividad correcta por código según la situación.</li><li>Se genera la solicitud, se inserta el número en el caso de Salesforce y se avanza hasta Resolución.</li><li>El asociado firma en Documentos para Asociados → \"Genérico\".</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta de ingeniería"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SALESFORCE"
+  ]
+}

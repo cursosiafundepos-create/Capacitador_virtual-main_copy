@@ -1,1 +1,18 @@
-{}
+{
+  "Sistema Open": [
+    "Gestión de Asociados",
+    "Productos y Trámites Generales",
+    "Medidores y Servicio Eléctrico",
+    "Infocomunicaciones (Internet y TV)",
+    "Servicios de Ingeniería",
+    "Atención al Asociado",
+    "Procedimientos de Caja",
+    "Sistemas y Códigos"
+  ],
+  "Salesforce": [
+    "Gestión de Asociados"
+  ],
+  "Qupos": [
+    "Sistemas y Códigos"
+  ]
+}

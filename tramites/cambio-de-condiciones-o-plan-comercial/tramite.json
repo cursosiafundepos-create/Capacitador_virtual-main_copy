@@ -1,0 +1,37 @@
+{
+  "id": "cambio-de-condiciones-o-plan-comercial",
+  "titulo": "Cambio de Condiciones o Plan Comercial",
+  "categoria": "Sistema Open",
+  "grupo": "Productos y Trámites Generales",
+  "descripcion": "Diferencia entre cambiar de plan y cambiar condiciones del mismo servicio.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "i1vaows4",
+      "titulo": "La diferencia clave",
+      "texto": "<ul><li>Cambio de PLAN COMERCIAL: el asociado cambia a otro plan distinto (ej. de TV cable de 60 canales a 30 canales).</li><li>Cambio de CONDICIONES: el asociado quita o modifica un componente del mismo servicio que ya tiene (ej. de fibra 100 megas baja a 40 megas).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de Condiciones o Plan Comercial"
+    },
+    {
+      "id": "xl2xyw07",
+      "titulo": "Pasos (similares en ambos)",
+      "texto": "<ul><li>CCGAC → producto → \"Venta y Gestión de productos\".</li><li>Elegir el nuevo plan o el nuevo componente, marcar \"Atención inmediata\" y generar la solicitud.</li><li>Firmar el documento \"Cambio de clase de servicio\" desde Documentos para Asociados.</li><li>En Salesforce, categoría \"Cambio condiciones productos\", indicando en el formulario si es cambio de plan comercial o cambio de condiciones.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de Condiciones o Plan Comercial"
+    },
+    {
+      "id": "41gw4iyb",
+      "titulo": "Cuidado con FONATEL",
+      "texto": "<p><strong>&#9888; Si el internet es de FONATEL, hay que tener cuidado con las fechas de corte de facturación: por fecha de corte el cambio puede no poder realizarse el mismo día. Si se necesita activar fibra con más velocidad por promociones mientras se aplica el cambio en Fonatel, se debe coordinar con Seguimiento de Trámites.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Cambio de Condiciones o Plan Comercial"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SALESFORCE"
+  ]
+}

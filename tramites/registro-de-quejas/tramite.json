@@ -1,0 +1,37 @@
+{
+  "id": "registro-de-quejas",
+  "titulo": "Registro de Quejas",
+  "categoria": "Sistema Open",
+  "grupo": "Atención al Asociado",
+  "descripcion": "Registro y seguimiento de quejas de asociados.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "aschnkjo",
+      "titulo": "Pasos",
+      "texto": "<ul><li>Salesforce: Casos → Nuevo → \"Quejas\" → siguiente. Se elige la situación en categoría/subcategoría y se anota en observaciones exactamente lo que indicó el asociado.</li><li>CCGAC: posicionarse en el contrato → \"Registro Quejas\" → elegir el causal más acorde → anotar la queja en observaciones.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Registro de Quejas"
+    },
+    {
+      "id": "0f9f9l2h",
+      "titulo": "Datos que siempre deben quedar registrados",
+      "texto": "<ul><li>Número de contrato</li><li>Número de acometida</li><li>Número de medidor</li><li>Número de contacto (opcional)</li></ul>",
+      "anotaciones": [],
+      "seccion": "Registro de Quejas"
+    },
+    {
+      "id": "v8kb4cwg",
+      "titulo": "Regla de visitas",
+      "texto": "<p><strong>&#9888; La primera visita de revisión por queja es GRATIS. Si el asociado solicita una segunda visita dentro del mismo año, esa sí se cobra. Hay situaciones que no se cubren, especialmente daños de causas naturales. Si el hecho fue provocado por Coopelesca, hay 8 días para presentar la queja sobre esa falla.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Registro de Quejas"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SALESFORCE"
+  ]
+}

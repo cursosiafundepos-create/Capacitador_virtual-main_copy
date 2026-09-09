@@ -1,0 +1,101 @@
+{
+  "id": "aspectos-clave-gestion-y-venta-de-servicios-electricos",
+  "titulo": "Aspectos clave: gestión y venta de servicios eléctricos",
+  "categoria": "Sistema Open",
+  "grupo": "Medidores y Servicio Eléctrico",
+  "descripcion": "Casos especiales de venta de medidores, medidores provisionales y modalidad prepago.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "pg9exyzl",
+      "titulo": "Requisitos generales (residencial/comercial/prepago)",
+      "texto": "<ul><li>Identificación de la persona física/jurídica.</li><li>Número de medidor o poste más cercano.</li><li>Acuerdo de junta cuando corresponda (debe presentarse el presidente con nota de la junta).</li><li>Autorización o poder, cuando aplique.</li><li>Documento eléctrico.</li><li>Si no es asociado: cuota de asociación ¢1.000.</li><li>Aporte de capital: residencial ¢40.000 / comercial ¢60.000.</li><li>Plano catastro.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "q98o5czu",
+      "titulo": "¿Qué pasa si alguien no desea asociarse?",
+      "texto": "<p><strong>&#9888; Se puede ofrecer el servicio de energía como \"usuario de servicio\", pero sin ningún beneficio de la cooperativa (sin internet, sin venta de materiales de medidor ni declaración de carga). Debe presentar planos eléctricos y colocar los materiales necesarios para la instalación. Se cobra un depósito de garantía: en COCSO se genera el monto requerido según la carga demandada.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "4oeb6rvv",
+      "titulo": "¿Qué pasa si la propiedad no está a nombre del asociado?",
+      "texto": "<p>Se puede presentar un poder, una nota autenticada por un abogado, o presentarse junto con el dueño registral si son familiares de primer grado y firman una autorización en plataforma.</p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "9dxv5asc",
+      "titulo": "¿Qué pasa si no traen el plano?",
+      "texto": "<p>Se puede buscar en el Registro Público y en SIRI. Si el plano no está inscrito, se puede hacer la venta llenando la declaración jurada de propiedades sin inscribir, con el visto bueno (VB) del líder.</p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "cmejuzxa",
+      "titulo": "Duda sobre línea eléctrica o distancia al poste (15 m o más)",
+      "texto": "<ul><li>Si al frente de la propiedad pasa conductor primario o secundario, hay disponibilidad; la cooperativa coloca postes de servicio si se requiere dar altura a las acometidas.</li><li>Si NO pasa línea o los postes son solo de acometida, se envía a inspección mediante venta de ingeniería, actividad 302288 \"Inspección para proyecto de redes\". En notas se coloca el plano de propiedad, plano del poste/medidor vecino y contacto, y se adjunta el plano en la solicitud.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "7pgcljjl",
+      "titulo": "¿Y si el plano indica un medidor no monofásico?",
+      "texto": "<p>Se debe enviar a estudio de factibilidad. El inspector en campo es quien define qué componentes se agregan en la venta del medidor.</p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "fnukless",
+      "titulo": "Medidores provisionales — Construcción",
+      "texto": "<ul><li>Requisitos: estar al día con los servicios de Coopelesca, cancelar depósito de garantía. No se requiere que el dueño registral sea quien lo solicita. La postura la debe cubrir el asociado (se puede facturar con VB del inspector).</li><li>Procedimiento en plataforma: se genera la venta como ME comercial (mismos requisitos). Si hay capital disponible, no se debe cubrir depósito de garantía. Se comparte el caso vía correo a Danny Alberto Díaz para el seguimiento.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "z6l9c7kw",
+      "titulo": "Medidores provisionales — Fiestas y actividades comunales",
+      "texto": "<ul><li>Requisitos: estar al día con los servicios, cancelar depósito de garantía. No se requiere que el dueño registral lo solicite. De ser necesario, Coopelesca coloca una postura provisional y luego la retira.</li><li>Procedimiento: se toman los datos (nombre a quién saldrá el medidor, fecha de uso inicio-fin, plano, medidor vecino, número de contacto) y se envía la información vía correo a Danny Alberto Díaz, del Centro de Contacto.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "d6dtdku1",
+      "titulo": "Dejar fijo o retirar un medidor provisional",
+      "texto": "<ul><li>Si el medidor es comercial y la construcción ya finalizada amerita un medidor residencial: se envía una Venta de Ingeniería 302318 \"Inspección solicitud por cambio de tarifa\".</li><li>Si el medidor es comercial y debe mantenerse así pero reubicarse a una postura/mocheta/estructura fija cumpliendo la normativa: Venta de Ingeniería 302279 \"Inspección para traslado o reubicación de medidor\".</li><li>El retiro de un medidor provisional es un retiro común; solo se debe informar a Danny por seguimiento del trámite.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "w7rephpc",
+      "titulo": "Medidor prepago: acceso voluntario vs. obligatorio",
+      "texto": "<ul><li>Acceso voluntario: exclusivo para medidores AMI y servicios residenciales monómicos (sin factor de potencia). Se debe permanecer al menos 6 meses en la modalidad. Plan comercial 366 \"Prepago Residencial\" (venta nueva o traslado voluntario); plan comercial 365 \"Prepago Residencial Automático\".</li><li>Acceso obligatorio: para usuarios clasificados como morosos reincidentes (Cobros realiza el estudio). Se debe permanecer un mínimo de 18 meses en la modalidad.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "ddjz3052",
+      "titulo": "Cambio de modalidad prepago",
+      "texto": "<p><strong>&#9888; El cambio NO es inmediato: debe cerrar el proceso de facturación de la modalidad actual. Se legaliza la orden de tipo de trabajo 24 \"Verificación de viabilidad del proceso por cambio de condiciones facturación XML\". El trámite de cambio de modalidad NO se puede anular. NO aplica para: servicio no residencial, facturación binómica, servicios con condición de salud, o servicios no AMI / AMI con deficiencias de comunicación.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    },
+    {
+      "id": "da1tk3w0",
+      "titulo": "¿Qué es el Código CIIU?",
+      "texto": "<p>Es el código alfanumérico que clasifica las actividades económicas de industrias en categorías y subcategorías. Para las casas (hogares) que aún no han sido construidas y se seleccionan como medidores comerciales, se utiliza el código H-52-521-5210-5210.0 \"Almacenamiento y depósito\".</p>",
+      "anotaciones": [],
+      "seccion": "Aspectos clave: gestión y venta de servicios eléctricos"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SIRI",
+    "COCSO"
+  ]
+}
