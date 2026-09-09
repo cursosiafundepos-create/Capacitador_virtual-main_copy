@@ -12,7 +12,9 @@ async function init() {
 
   document.getElementById('app').hidden = false;
   document.title = `${doc.titulo} · CATA`;
-  document.getElementById('linkEditar').href = `/editor.html?id=${encodeURIComponent(doc.id)}`;
+  const linkEditar = document.getElementById('linkEditar');
+  linkEditar.href = `/editor.html?id=${encodeURIComponent(doc.id)}`;
+  linkEditar.hidden = !AdminAuth.getToken();
 
   const pill = document.getElementById('vCategoria');
   pill.textContent = doc.categoria;

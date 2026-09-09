@@ -17,7 +17,7 @@ async function init() {
   render();
 
   document.getElementById('buscar').addEventListener('input', render);
-  document.getElementById('btnNuevo').addEventListener('click', () => adminGuard().then(() => toggleModal(true)));
+  document.getElementById('btnNuevo').addEventListener('click', () => adminGuard().then(() => { render(); toggleModal(true); }));
   document.getElementById('nCancelar').addEventListener('click', () => toggleModal(false));
   document.getElementById('nCrear').addEventListener('click', crear);
   document.getElementById('btnSalir').addEventListener('click', salir);
@@ -156,10 +156,11 @@ function cardHtml(t) {
             <a class="tc-ingresar" href="/viewer.html?id=${encodeURIComponent(t.id)}">
               Ingresar <span class="msym">arrow_outward</span>
             </a>
+            ${AdminAuth.getToken() ? `
             <div class="tc-actions">
               <a class="tc-action-btn" href="/editor.html?id=${encodeURIComponent(t.id)}" title="Editar"><span class="msym">edit</span></a>
               <button class="tc-action-btn danger" data-del="${encodeURIComponent(t.id)}" title="Eliminar"><span class="msym">delete</span></button>
-            </div>
+            </div>` : ''}
           </div>
         </div>
         <div class="tc-logo">
