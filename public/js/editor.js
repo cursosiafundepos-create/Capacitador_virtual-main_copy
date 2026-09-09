@@ -124,11 +124,36 @@ function crearTranscriptor({ btn, getVideoEl, box, estadoEl, listaEl, getNombreA
     return true;
   }
 
+  // Boton para plegar/desplegar el contenido de la transcripcion sin
+  // perder lo ya transcripto: útil cuando ocupa mucho espacio y se
+  // quiere ver el video más grande mientras se capturan fotogramas.
+  const head = box.querySelector('.transcripcion-head');
+  if (head) {
+    const btnToggle = document.createElement('button');
+    btnToggle.type = 'button';
+    btnToggle.className = 'btn small ghost';
+    const setEtiquetaToggle = (oculto) => {
+      btnToggle.innerHTML = oculto
+        ? '<span class="msym" style="font-size:15px">visibility</span> Mostrar transcripción'
+        : '<span class="msym" style="font-size:15px">visibility_off</span> Ocultar transcripción';
+    };
+    setEtiquetaToggle(false);
+    btnToggle.addEventListener('click', () => {
+      const oculto = !estadoEl.hidden;
+      estadoEl.hidden = oculto;
+      listaEl.hidden = oculto;
+      setEtiquetaToggle(oculto);
+    });
+    head.appendChild(btnToggle);
+  }
+
   btn.addEventListener('click', async () => {
     const nombreArchivo = getNombreArchivo();
     if (!nombreArchivo) return;
     box.hidden = false;
     listaEl.innerHTML = '';
+    listaEl.hidden = false;
+    estadoEl.hidden = false;
     estadoEl.textContent = 'Iniciando transcripción...';
     btn.disabled = true;
     try {
@@ -398,8 +423,12 @@ function bindGlobal() {
       textoSegmentoSeleccionado = null;
       DOC.pasos.push(paso);
       renderSteps();
+      // No hacemos scroll hasta el nuevo paso: si se estan capturando
+      // varios fotogramas seguidos del mismo video de referencia, alejar
+      // la vista obliga a volver a subir cada vez para seguir mirando el
+      // video. Se queda a la vista, en el punto donde se pauso, y los
+      // pasos nuevos quedan listos para acomodar despues.
       toast('Fotograma capturado como nuevo paso');
-      document.querySelector(`[data-step][data-id="${paso.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (e) { toast(e.message, true); }
   });
 
@@ -455,8 +484,41 @@ function renderEtiquetas() {
   });
 }
 
+// renderSteps() reconstruye todas las tarjetas de pasos desde cero, lo
+// que destruye y vuelve a crear cada <video> -y por lo tanto reinicia su
+// reproduccion a 0- aunque el cambio que disparo el re-render no tenga
+// nada que ver con ese video en particular (ej: se elimino o movio OTRO
+// paso). Guardamos el segundo actual y si estaba en reproduccion antes
+// de reconstruir, y lo restauramos despues, para que pausar/mover la
+// barra de un video no se pierda por acciones ajenas a el.
+function capturarEstadoVideos(list) {
+  const estados = {};
+  list.querySelectorAll('[data-step]').forEach((stepEl) => {
+    const video = stepEl.querySelector('video');
+    if (!video) return;
+    estados[stepEl.dataset.id] = { t: video.currentTime, paused: video.paused };
+  });
+  return estados;
+}
+
+function restaurarEstadoVideos(list, estados) {
+  Object.keys(estados).forEach((id) => {
+    const stepEl = list.querySelector(`[data-step][data-id="${id}"]`);
+    const video = stepEl && stepEl.querySelector('video');
+    if (!video) return;
+    const st = estados[id];
+    const aplicar = () => {
+      video.currentTime = st.t;
+      if (!st.paused) video.play().catch(() => { /* el usuario puede darle play manualmente */ });
+    };
+    if (video.readyState >= 1) aplicar();
+    else video.addEventListener('loadedmetadata', aplicar, { once: true });
+  });
+}
+
 function renderSteps() {
   const list = document.getElementById('stepList');
+  const estadosVideo = capturarEstadoVideos(list);
   list.innerHTML = '';
   document.getElementById('stepsEmpty').hidden = DOC.pasos.length > 0;
   stepRuntime.clear();
@@ -541,6 +603,7 @@ function renderSteps() {
 
     list.appendChild(stepEl);
   });
+  restaurarEstadoVideos(list, estadosVideo);
 }
 
 function renderAnnoProps(box, annotator, sel) {
@@ -804,8 +867,12 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
       const nuevoPaso = { id: makeStepId(), titulo: `Paso ${DOC.pasos.length + 1} (fotograma)`, texto: '', media: { tipo: 'imagen', src: res.src }, anotaciones: [] };
       DOC.pasos.splice(DOC.pasos.indexOf(paso) + 1, 0, nuevoPaso);
       renderSteps();
+      // No hacemos scroll hasta el nuevo paso: renderSteps() ya preserva
+      // la posicion y el play/pausa de este video, asi que la vista se
+      // queda aca para poder seguir capturando mas fotogramas sin tener
+      // que volver a subir cada vez. Los pasos nuevos quedan listos para
+      // acomodar (titulo, texto, marcado) despues.
       toast('Fotograma capturado como nuevo paso');
-      document.querySelector(`[data-step][data-id="${nuevoPaso.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (e) {
       toast('No se pudo capturar el fotograma: ' + e.message, true);
     } finally {
