@@ -1,0 +1,38 @@
+{
+  "id": "retiro-de-productos-y-recepcion-de-equipos",
+  "titulo": "Retiro de productos y recepción de equipos",
+  "categoria": "Sistema Open",
+  "grupo": "Productos y Trámites Generales",
+  "descripcion": "Retiro de servicios y devolución de equipos en Salesforce y Open Smartflex.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "inypmqjm",
+      "titulo": "Dos sistemas, un mismo trámite",
+      "texto": "<ul><li>Validar primero en CCGAC que el producto esté a nombre del asociado (por cédula, contrato, producto o equipo) y que el servicio esté al día.</li><li>El retiro requiere registro en dos sistemas: Salesforce (creación y seguimiento del caso) y Open Smartflex (ejecución técnica del retiro en CCGAC/CORCAO).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Retiro de productos y recepción de equipos"
+    },
+    {
+      "id": "bl2kdhvi",
+      "titulo": "En Salesforce",
+      "texto": "<ul><li>Casos → Nuevo → categoría \"Trámites\" → subcategoría \"Retiro de productos\" → seleccionar el tipo de producto a retirar.</li><li>El caso avanza por etapas: Solicitud → Análisis → Registro (aquí se anota el número de solicitud de Smartflex) → Formalización (firma) → Resolución → Cierre.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Retiro de productos y recepción de equipos"
+    },
+    {
+      "id": "eznxsgpi",
+      "titulo": "En CCGAC / CORCAO",
+      "texto": "<ul><li>Si hay saldo pendiente, se debe cancelar antes; si el servicio ya está suspendido, primero se hace el retiro y luego se cobra.</li><li>\"Venta y gestión de productos\" → quitar el producto → indicar motivo (normalmente \"solicitud de cliente\") y la causa.</li><li>Con el número de solicitud generado, se va a CORCAO → \"Asignación de órdenes\" → se indica cantidad y número de equipo → \"Legalizar\".</li><li>Se descarga el documento \"Genérico\" de Documentos para Asociados con ese número de solicitud, se guarda en la carpeta del asociado y se hace firmar.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Retiro de productos y recepción de equipos"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "CORCAO",
+    "SALESFORCE"
+  ]
+}

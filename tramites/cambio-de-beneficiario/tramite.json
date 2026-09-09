@@ -1,0 +1,36 @@
+{
+  "id": "cambio-de-beneficiario",
+  "titulo": "Cambio de beneficiario",
+  "categoria": "Salesforce",
+  "grupo": "Gestión de Asociados",
+  "descripcion": "Registrar o cambiar beneficiario, con o sin cuenta existente.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "4jxsl8gr",
+      "titulo": "Cuatro escenarios posibles",
+      "texto": "<ul><li>B.1 — Registro de beneficiario con cuenta existente en Salesforce.</li><li>B.2 — Registro de beneficiario sin cuenta (hay que crear el contacto primero).</li><li>B.3 — Cambio de beneficiario, con cuenta existente (se elimina la relación anterior y se crea la nueva).</li><li>B.4 — Cambio de beneficiario, sin cuenta (se elimina la relación anterior y se crea el contacto nuevo).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de beneficiario"
+    },
+    {
+      "id": "yr9g7wmi",
+      "titulo": "Flujo general en Salesforce",
+      "texto": "<ul><li>Ir a la sección Cuentas y buscar al asociado por número de cédula.</li><li>Entrar a \"Nueva relación\" (o primero \"eliminar\" la relación anterior si es un cambio).</li><li>Marcar la opción \"Beneficiario\" y continuar.</li><li>Buscar el contacto por cédula con la lupa; si no existe, se crea con el signo \"+\".</li><li>En el campo de porcentaje de beneficiario se coloca 100%.</li><li>Se agrega el parentesco y se finaliza.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de beneficiario"
+    },
+    {
+      "id": "ftoj1th4",
+      "titulo": "Documento físico obligatorio",
+      "texto": "<p><strong>&#9888; En todo cambio de beneficiario es indispensable obtener y hacer firmar al asociado el documento \"Campaña Actualización de Datos Físico\", disponible en Documentos para Asociados.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Cambio de beneficiario"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "SALESFORCE"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "traslado-de-infocomunicaciones",
+  "titulo": "Traslado de Infocomunicaciones",
+  "categoria": "Sistema Open",
+  "grupo": "Infocomunicaciones (Internet y TV)",
+  "descripcion": "Traslado de servicios de coaxial o TV cable a una nueva dirección.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "h3s022vo",
+      "titulo": "Regla clave",
+      "texto": "<p><strong>&#9888; Un traslado solo aplica para internet coaxial o TV cable. Si el servicio es de FIBRA ÓPTICA, NO se traslada: se retira el producto anterior y se realiza una venta nueva de internet, sujeta a disponibilidad del nuevo sitio.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Traslado de Infocomunicaciones"
+    },
+    {
+      "id": "f6w7dux6",
+      "titulo": "Pasos principales",
+      "texto": "<ul><li>En CCGAC verificar que el nuevo medidor NO tenga ya un producto asociado (no puede haber dos productos en el mismo medidor).</li><li>Posicionarse en el contrato/producto → \"Traslado de productos\" → se actualiza la dirección con georreferencia (el número de contrato se mantiene igual).</li><li>Se genera la solicitud y se crea el caso en Salesforce, categoría \"Traslado de productos\".</li><li>Con el número de orden se agenda la cita respetando el protocolo, y se firma el nuevo contrato (\"Genérico\") en Documentos para Asociados.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Traslado de Infocomunicaciones"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "CORCAO",
+    "SALESFORCE"
+  ]
+}

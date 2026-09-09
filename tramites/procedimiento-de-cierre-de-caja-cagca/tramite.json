@@ -1,0 +1,60 @@
+{
+  "id": "procedimiento-de-cierre-de-caja-cagca",
+  "titulo": "Procedimiento de cierre de caja (CAGCA)",
+  "categoria": "Sistema Open",
+  "grupo": "Procedimientos de Caja",
+  "descripcion": "Diez pasos para cerrar caja correctamente cada día.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "7rc8p3oi",
+      "titulo": "Preparación y depósito bancario",
+      "texto": "<ul><li>CAGCA → Operación → Depósito bancario.</li><li>Revisar los datáfonos: montos de reportes correctos → consignar según lote/fecha (CJ2) → aceptar uno por uno → escanear cierres (voucher) y cheques si los hay.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    },
+    {
+      "id": "t9gmn8jw",
+      "titulo": "Conteo de efectivo",
+      "texto": "<p><strong>&#9888; Regla de oro: contar el efectivo SIN cerrar el sistema. Se compara el monto que indica el sistema contra el dinero físico, se hace la consigna en Open y se verifica que quede únicamente el fondo de caja correspondiente a ¢200.000.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    },
+    {
+      "id": "ltm9non3",
+      "titulo": "Validación con Excel",
+      "texto": "<ul><li>Se compara en el archivo de control (Cuadre de Caja) el subtotal y el sub-fondo: deben dar ¢200.000.</li><li>Se permite una diferencia máxima de ¢1.000.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    },
+    {
+      "id": "ss6oxf1v",
+      "titulo": "Cierre en CAGCA",
+      "texto": "<ul><li>Si todo coincide: se cierra la caja en CAGCA (Operación → Cierre de caja).</li><li>Si hay faltante: se debe reponer. Si hay sobrante: se hace boleta de Open aparte, se entrega, pero NO se reporta en el sistema.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    },
+    {
+      "id": "e85bgkr7",
+      "titulo": "Registro, depósito y reportes",
+      "texto": "<ul><li>En Excel se registra boleta, monto y sistema (Open/Qupos), incluyendo datáfonos y efectivo.</li><li>En CAGCA → Depósito bancario se ingresa número de lote (voucher) y fecha.</li><li>Se generan los reportes de Documentos de caja (CAGCA) con el número de cajero y fecha.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    },
+    {
+      "id": "e1emiw35",
+      "titulo": "Envío y archivo",
+      "texto": "<ul><li>Todos los PDFs se envían por correo, adjuntando los archivos correctos.</li><li>En SharePoint → \"Cierre de cajas por punto de venta\": nuevo registro con fecha, punto de venta, nombre del cajero, comentarios y adjuntando PDFs y el Excel.</li><li>Los documentos físicos (vouchers, boletas) se escanean, agrupan, rotulan y se entregan a la persona encargada.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Procedimiento de cierre de caja (CAGCA)"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CAGCA",
+    "OPEN",
+    "QUPOS",
+    "SHAREPOINT"
+  ]
+}

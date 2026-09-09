@@ -1,0 +1,65 @@
+{
+  "id": "hogares-conectados",
+  "titulo": "Hogares Conectados",
+  "categoria": "Sistema Open",
+  "grupo": "Atención al Asociado",
+  "descripcion": "Gestiones sobre beneficios ya otorgados (el programa nuevo está cerrado).",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "uq8am482",
+      "titulo": "Estado del programa",
+      "texto": "<p><strong>&#9888; El programa \"Hogares Conectados\" ya NO recibe solicitudes nuevas (está cerrado). Solo aplica para personas que ya poseen el beneficio y necesitan una gestión: cambio de titular, cambio de operador, retiro, traslado o reincorporación.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "o9aqgf4l",
+      "titulo": "Validación en el IMAS",
+      "texto": "<ul><li>Se verifica en la página del IMAS si la persona tiene el beneficio, su quintil y si está activo.</li><li>Azul = pertenece a \"Hogares Conectados\"; rojo = pertenece a \"Becados MEP\" (hay que tener mucho cuidado en distinguirlos).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "b1aks2kr",
+      "titulo": "Promociones según etapa",
+      "texto": "<ul><li>Mientras se espera la aprobación del IMAS: promoción \"Familias Coopelesca\" (40% de descuento quintil 1, 30% quintil 2).</li><li>Una vez aprobado el beneficio: promoción \"Todos Conectados\" ($10 quintil 1, $23 quintil 2).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "106oh11u",
+      "titulo": "M.2 Reincorporaciones",
+      "texto": "<p>Aplica cuando el asociado había retirado el servicio y devuelto el equipo, pero regresa después, siempre que continúe asignado a Coopelesca en el sistema del IMAS. El plan a vender depende del ciclo de facturación actual (si aún no se facturó el mes, no se puede vender \"Todos Conectados\" directamente; se aplica \"Familias Coopelesca\").</p>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "l2h4227s",
+      "titulo": "M.3 Retiros",
+      "texto": "<p><strong>&#9888; No se pueden trasladar deudas diferidas entre productos distintos (por ejemplo, de un internet a un servicio de luz).</strong></p>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "017nabti",
+      "titulo": "M.4 Cambios de titular",
+      "texto": "<p>Se hace una cesión de derechos a otro miembro DENTRO del mismo núcleo familiar, con boletas de entrega y de compromiso de quien recibe.</p>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    },
+    {
+      "id": "epru6kkn",
+      "titulo": "Coordinación",
+      "texto": "<p>Toda la documentación de estos trámites se envía por correo a Karen, quien da seguimiento y aplica los cambios de plan comercial una vez aprobados.</p>",
+      "anotaciones": [],
+      "seccion": "Hogares Conectados"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "SALESFORCE"
+  ]
+}

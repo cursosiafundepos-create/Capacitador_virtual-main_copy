@@ -1,0 +1,54 @@
+{
+  "id": "venta-de-infocomunicaciones-internet-y-tv-cable",
+  "titulo": "Venta de Infocomunicaciones (internet y TV cable)",
+  "categoria": "Sistema Open",
+  "grupo": "Infocomunicaciones (Internet y TV)",
+  "descripcion": "Venta de internet fibra/coaxial y televisión por cable.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "7347z3eb",
+      "titulo": "Antes de vender",
+      "texto": "<ul><li>Verificar que la persona sea asociada (si no, asociarla).</li><li>Verificar disponibilidad: fibra óptica se revisa en CODISP; coaxial se revisa en ArcGIS.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta de Infocomunicaciones (internet y TV cable)"
+    },
+    {
+      "id": "ac2cyjfr",
+      "titulo": "Registro y georreferencia (CCGAC)",
+      "texto": "<ul><li>Se crea/ubica el contrato en \"Venta y gestión de productos\", usando como referencia un medidor vecino (la dirección se modifica levemente para no duplicarla exacta).</li><li>Se georreferencia la dirección desde el ícono del \"mundo\": se busca el medidor, se ubica el globo verde y se marca en rojo con doble clic + Enter.</li><li>Se eligen los componentes: para internet, \"Fibra wifi plus\" + velocidad + tipo de equipo + modo router; para TV, \"Paquete de canales analógico\" (30 canales, sin equipo) o \"Equipo decodificador + tarjeta\" para el paquete digital.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta de Infocomunicaciones (internet y TV cable)"
+    },
+    {
+      "id": "o9afa3nn",
+      "titulo": "Datos obligatorios en observaciones",
+      "texto": "<ul><li>Número de medidor y acometida</li><li>DOP y número de disponibilidad</li><li>Posición</li><li>Número de producto</li><li>Teléfono de contacto</li><li>Si es coaxial: el medidor de referencia</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta de Infocomunicaciones (internet y TV cable)"
+    },
+    {
+      "id": "gwlkbvca",
+      "titulo": "Cita de instalación",
+      "texto": "<p><strong>&#9888; Antes de que el asociado firme, se debe agendar la cita de instalación en CORCAO → \"Comprometer cita\", respetando siempre el protocolo de horario de agendamiento.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Venta de Infocomunicaciones (internet y TV cable)"
+    },
+    {
+      "id": "smq0268l",
+      "titulo": "Cierre del trámite",
+      "texto": "<ul><li>Firma del contrato (\"Contrato de venta de servicios Infocomunicaciones\" desde Documentos para Asociados).</li><li>Factura de cobro en FAGFI y cobro en CAGCA.</li><li>Si es asociado nuevo: se crea carpeta con su nombre y se sube todo a Documentos de Asociados (SharePoint).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Venta de Infocomunicaciones (internet y TV cable)"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "CODISP",
+    "ArcGIS",
+    "CORCAO",
+    "FAGFI"
+  ]
+}

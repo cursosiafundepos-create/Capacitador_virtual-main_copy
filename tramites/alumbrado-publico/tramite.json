@@ -1,0 +1,37 @@
+{
+  "id": "alumbrado-publico",
+  "titulo": "Alumbrado Público",
+  "categoria": "Sistema Open",
+  "grupo": "Atención al Asociado",
+  "descripcion": "Solicitud de lámpara nueva vs. reporte de daño de lámpara existente.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "kzntkjdc",
+      "titulo": "Dos trámites distintos, dos sistemas distintos",
+      "texto": "<ul><li>N.1 Solicitud de alumbrado público NUEVO: se hace SOLO en Salesforce (NO en Smartflex).</li><li>N.2 Reportar DAÑO de una lámpara existente: se hace SOLO en Smartflex/TTRFE (NO en Salesforce).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Alumbrado Público"
+    },
+    {
+      "id": "wxowz82d",
+      "titulo": "N.1 — Solicitud de lámpara pública",
+      "texto": "<ul><li>Salesforce → Nuevo caso → Trámites → \"Solicitud de lámpara pública\".</li><li>Se anota el número de poste, la razón de la solicitud y el teléfono de contacto.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Alumbrado Público"
+    },
+    {
+      "id": "8tpwgycb",
+      "titulo": "N.2 — Reportar daño",
+      "texto": "<ul><li>TTRFE → icono de lupa → tipo de elemento \"Alumbrado público\" → clase \"Alumbrado público\" → dirección \"CR\" + número de poste → buscar y seleccionar la lámpara.</li><li>Se selecciona el tipo de falla; en \"fecha de inicio de afectación\" se anota un estimado de días antes de la visita del asociado (no necesariamente el mismo día del reporte).</li><li>En observaciones se anota el daño reportado y el teléfono del asociado.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Alumbrado Público"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "SALESFORCE",
+    "TTRFE (Smartflex)"
+  ]
+}

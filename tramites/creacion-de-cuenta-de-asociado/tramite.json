@@ -1,0 +1,37 @@
+{
+  "id": "creacion-de-cuenta-de-asociado",
+  "titulo": "Creación de cuenta de asociado",
+  "categoria": "Sistema Open",
+  "grupo": "Gestión de Asociados",
+  "descripcion": "Registro de un nuevo asociado en Salesforce y beneficiarios.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "yrxkrtv6",
+      "titulo": "¿Por qué es el primer paso de casi todo trámite?",
+      "texto": "<ul><li>Antes de iniciar cualquier trámite hay que verificar si la persona ya es asociada.</li><li>Si no lo es, se debe asociar: tiene un costo de ¢1.000.</li><li>Además del costo de asociación, se cobra un aporte de capital de ingreso que varía según el tipo de trámite que la persona vaya a solicitar (por ejemplo, medidor residencial o comercial).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Creación de cuenta de asociado"
+    },
+    {
+      "id": "4rvn7vwf",
+      "titulo": "Pasos en Salesforce",
+      "texto": "<ul><li>Ingresar a Salesforce → sección Cuentas → \"Nueva cuenta\".</li><li>Indicar el tipo de cuenta a crear y agregar el número de cédula, luego \"Consultar\".</li><li>Llenar el formulario con los datos del cliente (Salesforce ya trae datos guardados por cédula en varios casos).</li><li>Al finalizar, aparece \"cuenta ha sido creada\"; la opción \"Datos de la SUGEF\" es opcional (solo si más adelante se requerirá financiamiento).</li></ul>",
+      "anotaciones": [],
+      "seccion": "Creación de cuenta de asociado"
+    },
+    {
+      "id": "rvezqgwi",
+      "titulo": "Beneficiario obligatorio",
+      "texto": "<p><strong>&#9888; Es necesario solicitarle al asociado dejar como mínimo una persona beneficiaria, en caso de fallecimiento. Al finalizar la creación de la cuenta se continúa directo con el proceso de \"Cambio de beneficiario\" para registrarlo.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Creación de cuenta de asociado"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "SALESFORCE",
+    "CCGAC"
+  ]
+}

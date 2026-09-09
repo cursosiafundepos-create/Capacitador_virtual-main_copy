@@ -1,0 +1,60 @@
+{
+  "id": "guia-rapida-ccgac-fagfi-y-arcgis",
+  "titulo": "Guía rápida: CCGAC, FAGFI y ArcGIS",
+  "categoria": "Sistema Open",
+  "grupo": "Sistemas y Códigos",
+  "descripcion": "Códigos y atajos operativos frecuentes en ventas y cobros.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "vjaj2i4g",
+      "titulo": "Venta de servicio de cable (guía operativa rápida)",
+      "texto": "<ul><li>Requisitos: cédula y número de abonado de la casa/medidor donde se instalará.</li><li>Costo: ¢12.500 (más ¢1.000 si hay que asociar al cliente).</li><li>En ArcGIS se busca disponibilidad de cable: se seleccionan las capas COAXIAL y COFI-TAP. Distancia máxima: 100 m.</li><li>Paquetes disponibles de 30 y 60 canales; cada caja adicional tiene un costo aproximado de ¢1.300.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    },
+    {
+      "id": "5q1lpqgg",
+      "titulo": "Cobro con FAGFI",
+      "texto": "<ul><li>Para cobrar los ¢12.500 en FAGFI: número de cédula → número de contrato → número de producto → concepto \"57 AP capital info\" → causa \"8\" → \"D\" → monto ¢12.500.</li><li>Cuota de ingreso (asociación): ¢1.000. Aporte de capital de vivienda: ¢390 (según trámite).</li><li>Código de \"diseño de planos eléctricos\" (declaración de carga) en FAGFI: 2705, con código de IVA 700.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    },
+    {
+      "id": "q21jni3c",
+      "titulo": "Anular una venta",
+      "texto": "<p>Contrato → producto → solicitud → \"Anular solicitud\" → motivo #9 → explicar el porqué de la anulación.</p>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    },
+    {
+      "id": "djvh4mlm",
+      "titulo": "Retiro de servicio de cable (sin equipo completo)",
+      "texto": "<p><strong>&#9888; Si el asociado NO devuelve el equipo completo: la caja decodificadora vale ¢45.000 y cada cable/control vale ¢7.000. Se hace un FAGFI y luego se cobra en CAGCA.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    },
+    {
+      "id": "f4co187b",
+      "titulo": "Cartera castigada y grupos de recaudo",
+      "texto": "<ul><li>Cartera castigada: se revisa en COACO (\"Consulta de cartera castigada\"); las facturas iguales se deben sumar antes de cobrar en CAGCA.</li><li>Grupos de recaudo: CAGCA → Operación → Grupo de recaudo, permite agrupar varios contratos para cobrarlos juntos por número de grupo.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    },
+    {
+      "id": "bpxgnivl",
+      "titulo": "Carta de disponibilidad",
+      "texto": "<p>Requiere: cédula, plano catastro y número de medidor vecino o poste. Se llena una vez verificada la disponibilidad en ArcGIS, se anota el consecutivo en el Excel de cartas de disponibilidad, y se imprime y firma físicamente.</p>",
+      "anotaciones": [],
+      "seccion": "Guía rápida: CCGAC, FAGFI y ArcGIS"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "FAGFI",
+    "ArcGIS",
+    "COACO"
+  ]
+}

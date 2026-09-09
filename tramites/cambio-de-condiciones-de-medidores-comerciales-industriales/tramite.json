@@ -1,0 +1,72 @@
+{
+  "id": "cambio-de-condiciones-de-medidores-comerciales-industriales",
+  "titulo": "Cambio de condiciones de medidores comerciales/industriales",
+  "categoria": "Sistema Open",
+  "grupo": "Medidores y Servicio Eléctrico",
+  "descripcion": "Modificación de características del servicio, CTs/PTs, aumentos de carga y estudios de factibilidad.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "yteequzs",
+      "titulo": "¿Con quién se gestionan estos trámites?",
+      "texto": "<p><strong>&#9888; Estos trámites y procesos técnicos de servicios comerciales e industriales pueden gestionarse con el equipo de Proyectos Pagos o con Michael Chaves Soto, encargado de los medidores de máxima demanda, líder del departamento de Atención al Asociado y líder del equipo de Gestión de Trámites.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "p7y21p9e",
+      "titulo": "Cambio de condiciones",
+      "texto": "<ul><li>Se realiza cuando el asociado necesita modificar las características del servicio eléctrico existente: cambio del tipo de medidor, modificación en la carga instalada, cambio de tarifa o clasificación del servicio, o ajustes en la forma de medición o conexión.</li><li>Se solicita cuando el negocio o industria amplía operaciones o cambia su consumo: un medidor cambia a plan comercial/industrial cuando su consumo es igual o superior a 3.000 kWh.</li><li>Requisito: plano eléctrico.</li><li>Se realiza por medio de inspección, a través de la venta de ingeniería \"Inspección para Redes Eléctricas\", causal 302288.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "btwk644l",
+      "titulo": "Adición o retiro de CTs o PTs",
+      "texto": "<ul><li>En servicios con medición indirecta o de máxima demanda se utilizan equipos especiales.</li><li>CTs (Transformadores de Corriente): reducen la corriente para que el medidor pueda medirla correctamente.</li><li>PTs (Transformadores de Tensión): reducen el voltaje a niveles seguros para la medición.</li><li>Se realiza la adición o retiro cuando: cambia la capacidad del servicio, se instala un nuevo sistema de medición (medidor nuevo), o se modifica la configuración del medidor de máxima demanda.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "h9kp3hn6",
+      "titulo": "Aumentos de carga",
+      "texto": "<p>Se solicita cuando el asociado necesita mayor capacidad eléctrica para operar equipos adicionales o ampliar su actividad. Generalmente se debe presentar el plano eléctrico, y se realiza por medio de inspección a través de la venta de ingeniería \"Inspección para Redes Eléctricas\", causal 302288 (el mismo causal que el cambio de condiciones).</p>",
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "bcpewywk",
+      "titulo": "Cálculo de aportes de capital para medidores de máxima demanda",
+      "texto": "<p>Cuando se instala un medidor de máxima demanda, el asociado debe cancelar un aporte de capital. El cálculo se realiza con base en la demanda calculada en el documento eléctrico, y debe ser coordinado con la líder del departamento de Atención al Asociado.</p>",
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "zjfxd55w",
+      "titulo": "Estudio de factibilidad de máxima demanda",
+      "texto": "<ul><li>Es un análisis técnico que realiza la cooperativa para determinar si la red puede soportar la demanda solicitada por el asociado.</li><li>Se utiliza especialmente cuando existe duda sobre el tipo de medidor que debe instalarse, o cuando el consumo eléctrico será alto o variable.</li><li>Aplica a proyectos grandes: condominios, centros comerciales o industrias (ej. El Encuentro, Plaza San Carlos, Plaza Florencia, supermercados o restaurantes grandes, locales comerciales grandes, hoteles, granjas avícolas).</li><li>También permite definir el tipo de medición a instalar y si la red eléctrica necesita mejoras.</li><li>Para generarlo se deben presentar los planos eléctricos; la solicitud se genera desde CCGAC → Procesos → \"Estudio de Factibilidad del Servicio\" (parte inferior derecha del menú).</li></ul>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/cambio-de-condiciones-de-medidores-comerciales-industriales/media/1788970023407-ccgac_menu.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    },
+    {
+      "id": "dd2hkylz",
+      "titulo": "Pantalla real de la solicitud en CCGAC",
+      "texto": "<p>Al generar el estudio se completan los datos básicos de la solicitud: interacción, número de solicitud, fecha, funcionario, área de atención, medio de recepción, información del solicitante (cédula) e información de contrato.</p>",
+      "media": {
+        "tipo": "imagen",
+        "src": "/tramites/cambio-de-condiciones-de-medidores-comerciales-industriales/media/1788970023408-estudio_factibilidad.jpg"
+      },
+      "anotaciones": [],
+      "seccion": "Cambio de condiciones de medidores comerciales/industriales"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC"
+  ]
+}

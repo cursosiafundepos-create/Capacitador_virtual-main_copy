@@ -1,0 +1,60 @@
+{
+  "id": "fondo-mutual",
+  "titulo": "Fondo Mutual",
+  "categoria": "Sistema Open",
+  "grupo": "Gestión de Asociados",
+  "descripcion": "Trámite por fallecimiento de un asociado, con o sin deudas.",
+  "creado": "2026-09-09T16:07:03.398Z",
+  "actualizado": "2026-09-09T16:07:03.398Z",
+  "pasos": [
+    {
+      "id": "bfg4wozr",
+      "titulo": "Requisito indispensable",
+      "texto": "<p><strong>&#9888; Solo aplica para un asociado FALLECIDO que tenía servicios activos y estaba al día con Coopelesca. Hay 1 año de plazo para gestionar la solicitud. Si el fallecido no tiene ningún producto activo, NO es sujeto al Fondo Mutual.</strong></p>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    },
+    {
+      "id": "u2lg1oq4",
+      "titulo": "Validaciones iniciales",
+      "texto": "<ul><li>En CCGAC, revisar que no haya saldo pendiente con la cédula del fallecido.</li><li>En Salesforce o COACO, validar que el solicitante sí sea el beneficiario registrado; si no es asociado, se debe asociar.</li><li>En QUPOS → Estado de cuenta (se busca por la lupa en la pantalla principal): se revisan los ingresos anticipados y las facturas a crédito corriente del fallecido y del beneficiario, y se toma pantallazo de cada uno (se necesitan como respaldo). Este paso reemplaza la antigua consulta que se hacía en MBACASE.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    },
+    {
+      "id": "evyg0b6b",
+      "titulo": "Con deudas vs. sin deudas",
+      "texto": "<ul><li>Sin deudas: se hace directamente la Cesión de Derechos en CCGAC para traspasar los servicios al beneficiario.</li><li>Con deudas: primero se deben cancelar los saldos pendientes (la persona beneficiaria debe pagar la facturación ya emitida); las deudas de almacén se liquidan del capital si alcanza. Solo después se hace la Cesión de Derechos.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    },
+    {
+      "id": "k5yo78jt",
+      "titulo": "Documentación (machotes en COACO)",
+      "texto": "<ul><li>Hoja Mutual, Solicitud de Fondo Mutual y Traspaso de Capital se generan desde COACO (solo se sustituyen nombre, cédula, fechas y montos).</li><li>Se escanean las cédulas y el acta de defunción, y se anexan los pantallazos de estado de cuenta.</li><li>Todos los documentos firmados se unen en un solo PDF, respetando el orden, y se envían por correo al líder del departamento para pago vía Tesorería.</li></ul>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    },
+    {
+      "id": "hf8zsi8d",
+      "titulo": "Requisitos documentales",
+      "texto": "<ul><li>Acta de defunción</li><li>Cédula del beneficiario</li><li>Cédula del asociado (no indispensable)</li></ul>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    },
+    {
+      "id": "qk3s0sw6",
+      "titulo": "Cambio de sistema: de MBACASE a QUPOS",
+      "texto": "<p><strong>&#9888; Importante: el sistema MBACASE fue sustituido por QUPOS para la gestión de facturación y estado de cuenta del almacén/ferretería. Toda revisión de deudas del fallecido y del beneficiario que antes se hacía en MBACASE ahora se realiza en QUPOS (ver el módulo \"QUPOS: facturación y caja\" para el detalle completo del sistema).</strong></p>",
+      "anotaciones": [],
+      "seccion": "Fondo Mutual"
+    }
+  ],
+  "vinculos": [],
+  "etiquetas": [
+    "CCGAC",
+    "COACO",
+    "QUPOS",
+    "SALESFORCE"
+  ]
+}
