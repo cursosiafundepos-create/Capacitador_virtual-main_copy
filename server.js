@@ -72,22 +72,39 @@ const EMPLEADOS_FILE = path.join(DATA_DIR, 'empleados.json');
 // como pendiente para efectos de invitaciones y practicas de refuerzo.
 const NOTA_APROBATORIA = 70;
 
-// Primera vez que arranca contra un DATA_ROOT vacio (disco persistente
-// recien creado): siembra con el contenido ya versionado en el repo
-// (tramites y manuales de ejemplo) para no arrancar en blanco. Despues de
-// esto el disco manda solo -nunca se vuelve a copiar, para no pisar
-// contenido nuevo agregado desde la app.
-function seedSiVacio(dirName) {
+function readJSON(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function writeJSON(file, data) {
+  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+}
+
+// El disco persistente (DATA_ROOT) arranca vacio la primera vez, asi que se
+// siembra con el contenido versionado en el repo. Pero un deploy posterior
+// puede traer trámites/manuales nuevos agregados por commit (no por la app)
+// -por eso esto corre en cada arranque, no solo la primera vez, y copia
+// unicamente las entradas que el disco todavia no tiene: jamas pisa ni
+// borra un tramite/manual ya cargado desde la app.
+function sembrarFaltantes(dirName) {
   if (DATA_ROOT === ROOT) return;
   const origen = path.join(ROOT, dirName);
   const destino = path.join(DATA_ROOT, dirName);
   if (!fs.existsSync(origen)) return;
-  if (fs.existsSync(destino) && fs.readdirSync(destino).length > 0) return;
-  fs.cpSync(origen, destino, { recursive: true });
-  console.log(`Semilla inicial de "${dirName}" copiada a ${destino}`);
+  if (!fs.existsSync(destino)) fs.mkdirSync(destino, { recursive: true });
+  for (const entry of fs.readdirSync(origen, { withFileTypes: true })) {
+    const destinoEntry = path.join(destino, entry.name);
+    if (fs.existsSync(destinoEntry)) continue;
+    fs.cpSync(path.join(origen, entry.name), destinoEntry, { recursive: true });
+    console.log(`Semilla: "${dirName}/${entry.name}" copiado a ${destinoEntry}`);
+  }
 }
-for (const dirName of ['tramites', 'manuales', 'data', 'evaluaciones']) {
-  seedSiVacio(dirName);
+for (const dirName of ['tramites', 'manuales', 'evaluaciones']) {
+  sembrarFaltantes(dirName);
 }
 
 for (const dir of [TRAMITES_DIR, MANUALES_DIR, DATA_DIR, EVALUACIONES_DIR]) {
@@ -95,6 +112,20 @@ for (const dir of [TRAMITES_DIR, MANUALES_DIR, DATA_DIR, EVALUACIONES_DIR]) {
 }
 if (!fs.existsSync(MANUALES_META_FILE)) {
   fs.writeFileSync(MANUALES_META_FILE, JSON.stringify({}, null, 2));
+}
+if (DATA_ROOT !== ROOT) {
+  // Mismo criterio aditivo que arriba, pero para los metadatos de manuales:
+  // agrega las entradas nuevas del repo sin tocar las que ya hay en disco.
+  const metaBase = readJSON(path.join(ROOT, 'data', 'manuales-meta.json'), {});
+  const metaActual = readJSON(MANUALES_META_FILE, {});
+  let metaCambio = false;
+  for (const [id, meta] of Object.entries(metaBase)) {
+    if (!(id in metaActual)) {
+      metaActual[id] = meta;
+      metaCambio = true;
+    }
+  }
+  if (metaCambio) writeJSON(MANUALES_META_FILE, metaActual);
 }
 if (!fs.existsSync(EMPLEADOS_FILE)) {
   fs.writeFileSync(EMPLEADOS_FILE, JSON.stringify([], null, 2));
@@ -161,20 +192,20 @@ function tramitePath(slug) {
   return path.join(TRAMITES_DIR, safeSlug(slug));
 }
 
-function readJSON(file, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch (e) {
-    return fallback;
-  }
-}
-
-function writeJSON(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
-}
-
 CATEGORIAS = readJSON(CATEGORIAS_FILE, null) || CATEGORIAS_DEFAULT.slice();
 if (!fs.existsSync(CATEGORIAS_FILE)) writeJSON(CATEGORIAS_FILE, CATEGORIAS);
+if (DATA_ROOT !== ROOT) {
+  // Aditivo: agrega temas nuevos del repo que todavia no esten en disco.
+  const categoriasBase = readJSON(path.join(ROOT, 'data', 'categorias.json'), []);
+  let cambio = false;
+  for (const cat of categoriasBase) {
+    if (!CATEGORIAS.some(c => c.toLowerCase() === cat.toLowerCase())) {
+      CATEGORIAS.push(cat);
+      cambio = true;
+    }
+  }
+  if (cambio) writeJSON(CATEGORIAS_FILE, CATEGORIAS);
+}
 
 function agregarCategoria(nombre) {
   const limpio = (nombre || '').trim();
@@ -196,6 +227,21 @@ const GRUPOS_FILE = path.join(DATA_DIR, 'grupos.json');
 let GRUPOS;
 GRUPOS = readJSON(GRUPOS_FILE, null) || {};
 if (!fs.existsSync(GRUPOS_FILE)) writeJSON(GRUPOS_FILE, GRUPOS);
+if (DATA_ROOT !== ROOT) {
+  // Aditivo: agrega temas/grupos nuevos del repo que todavia no esten en disco.
+  const gruposBase = readJSON(path.join(ROOT, 'data', 'grupos.json'), {});
+  let cambio = false;
+  for (const [tema, grupos] of Object.entries(gruposBase)) {
+    const lista = GRUPOS[tema] || (GRUPOS[tema] = []);
+    for (const g of grupos) {
+      if (!lista.some(x => x.toLowerCase() === g.toLowerCase())) {
+        lista.push(g);
+        cambio = true;
+      }
+    }
+  }
+  if (cambio) writeJSON(GRUPOS_FILE, GRUPOS);
+}
 
 function agregarGrupo(tema, nombre) {
   const temaLimpio = (tema || '').trim();
