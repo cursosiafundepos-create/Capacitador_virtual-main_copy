@@ -2,7 +2,10 @@ let TRAMITES = [];
 let CATEGORIAS = [];
 let GRUPOS = {}; // { tema: [grupo, grupo, ...] }
 let temaActivo = null; // null = ningún tema abierto todavía; '' = "Todos" abierto explícitamente
-let grupoActivo = null; // null = todos los grupos del tema; '__sin__' = sin grupo; string = grupo puntual
+// Claves "tema::grupo" de las secciones de grupo que el usuario colapsó a
+// mano. Vacío = todas abiertas por defecto (para no esconder trámites que
+// alguien busca sin que lo pida explícitamente).
+const gruposColapsados = new Set();
 
 async function init() {
   const data = await Api.listTramites();
@@ -128,7 +131,6 @@ function renderTemas() {
   list.querySelectorAll('.folder-item').forEach(li => {
     li.addEventListener('click', () => {
       temaActivo = li.dataset.cat;
-      grupoActivo = null;
       renderTemas();
       render();
     });
@@ -146,7 +148,6 @@ function cardHtml(t) {
         <div class="tc-glass">
           <div class="tc-content">
             <span class="pill" data-cat="${escapeHtml(t.categoria)}">${escapeHtml(t.categoria)}</span>
-            ${t.grupo ? `<span class="pill outline">${escapeHtml(t.grupo)}</span>` : ''}
             ${tags ? `<div class="tag-row">${tags}</div>` : ''}
             <span class="tc-title">${escapeHtml(t.titulo)}</span>
             <span class="tc-text">${escapeHtml(t.descripcion || 'Sin descripción')}</span>
@@ -173,37 +174,63 @@ function cardHtml(t) {
   `;
 }
 
-function grupoChipHtml(value, label, count, active) {
-  return `<button class="grupo-chip${active ? ' act' : ''}" type="button" data-grupo="${escapeHtml(value)}">${escapeHtml(label)} <span class="count">${count}</span></button>`;
-}
-
-// Chips para filtrar/ordenar los trámites de un tema puntual por su grupo
-// (subcategoría). "itemsTema" ya viene filtrado por tema y búsqueda.
-function renderGrupoFiltros(tema, itemsTema) {
-  const bar = document.getElementById('grupoFiltros');
+// En vez de repetir el grupo como una etiqueta en cada ficha (poco legible
+// cuando hay varias fichas seguidas del mismo grupo), los trámites de un
+// tema se organizan en secciones colapsables por grupo -una por cada grupo
+// definido para ese tema, en su orden, más "Sin grupo" al final si aplica.
+// Si el tema no tiene grupos definidos, se devuelve una grilla plana como
+// antes (una sola "sección" no aporta nada).
+function grupoSeccionesHtml(tema, itemsTema) {
   const gruposTema = GRUPOS[tema] || [];
   if (!gruposTema.length) {
-    bar.hidden = true;
-    bar.innerHTML = '';
-    grupoActivo = null;
-    return;
+    return `<div class="grid">${itemsTema.map(cardHtml).join('')}</div>`;
   }
 
-  const sinGrupo = itemsTema.filter(t => !t.grupo).length;
-  const chips = [grupoChipHtml('', 'Todos', itemsTema.length, grupoActivo === null)]
-    .concat(gruposTema.map(g => grupoChipHtml(g, g, itemsTema.filter(t => t.grupo === g).length, grupoActivo === g)));
-  if (sinGrupo) chips.push(grupoChipHtml('__sin__', 'Sin grupo', sinGrupo, grupoActivo === '__sin__'));
+  const secciones = gruposTema
+    .map(g => ({ grupo: g, items: itemsTema.filter(t => t.grupo === g) }))
+    .filter(s => s.items.length);
+  const sinGrupo = itemsTema.filter(t => !t.grupo || !gruposTema.includes(t.grupo));
+  if (sinGrupo.length) secciones.push({ grupo: null, items: sinGrupo });
+  if (!secciones.length) return '';
 
-  bar.innerHTML = chips.join('') +
-    `<button class="grupo-chip add" type="button" id="btnGrupoNuevoInline"><span class="msym">add_circle</span> Nuevo grupo</button>`;
-  bar.hidden = false;
+  return secciones.map(sec => {
+    const key = `${tema}::${sec.grupo || '__sin__'}`;
+    const abierta = !gruposColapsados.has(key);
+    return `
+      <section class="grupo-section${abierta ? '' : ' colapsada'}">
+        <div class="grupo-section-head" data-grupo-key="${escapeHtml(key)}">
+          <h3>${escapeHtml(sec.grupo || 'Sin grupo')}</h3>
+          <span class="count">${sec.items.length}</span>
+          <span class="msym grupo-section-chevron">expand_more</span>
+        </div>
+        <div class="grid"${abierta ? '' : ' hidden'}>${sec.items.map(cardHtml).join('')}</div>
+      </section>
+    `;
+  }).join('');
+}
 
-  bar.querySelectorAll('[data-grupo]').forEach(el => {
-    el.addEventListener('click', () => {
-      grupoActivo = el.dataset.grupo === '' ? null : el.dataset.grupo;
+function bindGrupoSecciones(container) {
+  container.querySelectorAll('.grupo-section-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const key = head.dataset.grupoKey;
+      if (gruposColapsados.has(key)) gruposColapsados.delete(key);
+      else gruposColapsados.add(key);
       render();
     });
   });
+}
+
+// Botón para agregar un grupo nuevo al tema que se está viendo (solo tiene
+// sentido con un tema puntual seleccionado, y solo lo ve un admin).
+function renderNuevoGrupoBtn(tema) {
+  const bar = document.getElementById('grupoFiltros');
+  if (!tema || tema === 'Otros' || !AdminAuth.getToken()) {
+    bar.hidden = true;
+    bar.innerHTML = '';
+    return;
+  }
+  bar.hidden = false;
+  bar.innerHTML = `<button class="grupo-chip add" type="button" id="btnGrupoNuevoInline"><span class="msym">add_circle</span> Nuevo grupo</button>`;
   document.getElementById('btnGrupoNuevoInline').addEventListener('click', async () => {
     await adminGuard();
     const nombre = await promptDialog(`Nombre del grupo nuevo dentro de "${tema}":`, {
@@ -213,7 +240,6 @@ function renderGrupoFiltros(tema, itemsTema) {
     try {
       const data = await Api.crearGrupo(tema, nombre);
       GRUPOS = data.items;
-      grupoActivo = data.nombre;
       render();
       toast(`Grupo "${data.nombre}" agregado`);
     } catch (e) { toast(e.message, true); }
@@ -223,12 +249,10 @@ function renderGrupoFiltros(tema, itemsTema) {
 function render() {
   const q = document.getElementById('buscar').value.toLowerCase();
   const grid = document.getElementById('grid');
-  const grupoBar = document.getElementById('grupoFiltros');
   const conocidas = new Set(CATEGORIAS);
 
   if (temaActivo === null && !q) {
-    grupoBar.hidden = true;
-    grupoBar.innerHTML = '';
+    renderNuevoGrupoBtn(null);
     grid.innerHTML = `
       <div class="tema-placeholder">
         <span class="msym">arrow_back</span>
@@ -240,25 +264,13 @@ function render() {
   }
 
   const temaEfectivo = temaActivo === null ? '' : temaActivo;
-  const itemsTema = TRAMITES.filter(t => {
+  const items = TRAMITES.filter(t => {
     const matchQ = !q || t.titulo.toLowerCase().includes(q) || (t.descripcion || '').toLowerCase().includes(q);
     const matchC = !temaEfectivo || (temaEfectivo === 'Otros' ? !conocidas.has(t.categoria) : t.categoria === temaEfectivo);
     return matchQ && matchC;
   });
 
-  if (temaEfectivo && temaEfectivo !== 'Otros') {
-    renderGrupoFiltros(temaEfectivo, itemsTema);
-  } else {
-    grupoBar.hidden = true;
-    grupoBar.innerHTML = '';
-    grupoActivo = null;
-  }
-
-  const items = itemsTema.filter(t => {
-    if (grupoActivo === null) return true;
-    if (grupoActivo === '__sin__') return !t.grupo;
-    return t.grupo === grupoActivo;
-  });
+  renderNuevoGrupoBtn(temaEfectivo);
 
   if (!items.length) {
     grid.innerHTML = `<div class="empty">No hay trámites que coincidan. Crea uno nuevo con "+ Nuevo trámite".</div>`;
@@ -280,7 +292,7 @@ function render() {
           <h2>${escapeHtml(sec.cat || 'Otros')}</h2>
           <span class="count">${sec.items.length}</span>
         </div>
-        <div class="grid">${sec.items.map(cardHtml).join('')}</div>
+        ${grupoSeccionesHtml(sec.cat || '', sec.items)}
       </section>
     `).join('');
   } else {
@@ -289,10 +301,11 @@ function render() {
         <h2>${escapeHtml(temaActivo)}</h2>
         <span class="count">${items.length} trámite${items.length === 1 ? '' : 's'}</span>
       </div>
-      <div class="grid">${items.map(cardHtml).join('')}</div>
+      ${grupoSeccionesHtml(temaActivo, items)}
     `;
   }
   grid.innerHTML = html;
+  bindGrupoSecciones(grid);
 
   grid.querySelectorAll('[data-del]').forEach(btn => {
     btn.addEventListener('click', async () => {
