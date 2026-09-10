@@ -781,6 +781,68 @@ app.get('/api/tramites/:slug/media/:nombre/transcripcion', requireAdmin, (req, r
   res.json({ ...job, iniciada: true });
 });
 
+// ---------- Reemplazo de audio (narracion grabada aparte) ----------
+// Para un video sin audio o con el audio dañado: la narracion se graba y
+// se sube por separado como cualquier otro archivo (POST /media), y este
+// endpoint la combina con el video existente via ffmpeg -map, copiando el
+// video sin recodificar. El resultado se guarda en un archivo NUEVO: el
+// video original no se toca ni se borra, solo se actualiza a que paso
+// media apunta el paso (ver editor.js). El audio subido si se borra al
+// terminar: es un intermedio de esta operacion, no un dato del tramite.
+const audioReplaceJobs = new Map();
+
+app.post('/api/tramites/:slug/media/:nombre/reemplazar-audio', requireAdmin, (req, res) => {
+  if (!FFMPEG_AVAILABLE) return res.status(503).json({ error: 'Esta funcion necesita ffmpeg, que no esta disponible en este servidor.' });
+  const { slug, nombre } = req.params;
+  const audioNombre = req.body && req.body.audioNombre;
+  if (!MEDIA_NAME_RE.test(nombre)) return res.status(400).json({ error: 'Nombre de video invalido' });
+  if (!audioNombre || !MEDIA_NAME_RE.test(audioNombre)) return res.status(400).json({ error: 'Nombre de audio invalido' });
+
+  const mediaDir = path.join(tramitePath(slug), 'media');
+  const videoPath = path.join(mediaDir, nombre);
+  const audioPath = path.join(mediaDir, audioNombre);
+  if (!fs.existsSync(videoPath)) return res.status(404).json({ error: 'Video no encontrado' });
+  if (!fs.existsSync(audioPath)) return res.status(404).json({ error: 'Audio no encontrado' });
+
+  const outName = `${path.basename(nombre, path.extname(nombre))}-narrado-${Date.now()}.mp4`;
+  const outPath = path.join(mediaDir, outName);
+  const jobKey = `${slug}/${nombre}`;
+  audioReplaceJobs.set(jobKey, { done: false });
+
+  const args = [
+    '-y', '-i', videoPath, '-i', audioPath,
+    '-map', '0:v:0', '-map', '1:a:0',
+    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k',
+    '-shortest', '-movflags', '+faststart',
+    outPath
+  ];
+  execFile('ffmpeg', args, { maxBuffer: 1024 * 1024 * 20, timeout: 20 * 60 * 1000 }, (err) => {
+    fs.unlink(audioPath, () => {});
+    if (err) {
+      try { fs.unlinkSync(outPath); } catch (_) { /* no se llego a crear */ }
+      console.warn('No se pudo combinar la narracion con el video:', err.message);
+      audioReplaceJobs.set(jobKey, { done: true, error: 'No se pudo combinar la narración con el video.' });
+      return;
+    }
+    audioReplaceJobs.set(jobKey, {
+      done: true,
+      src: `/tramites/${slug}/media/${outName}`,
+      nombre: outName,
+      tipo: 'video/mp4'
+    });
+  });
+
+  res.json({ iniciado: true });
+});
+
+app.get('/api/tramites/:slug/media/:nombre/reemplazar-audio/estado', requireAdmin, (req, res) => {
+  const { slug, nombre } = req.params;
+  const job = audioReplaceJobs.get(`${slug}/${nombre}`);
+  if (!job) return res.status(404).json({ error: 'No hay ningun reemplazo de audio en curso para este video' });
+  if (job.done) audioReplaceJobs.delete(`${slug}/${nombre}`);
+  res.json(job);
+});
+
 // ---------- Manuales ----------
 
 app.get('/api/manuales', (req, res) => {
