@@ -164,3 +164,52 @@ class MediaCapture {
     if (this._audioContext) { this._audioContext.close(); this._audioContext = null; }
   }
 }
+
+// Graba solo el microfono (sin video), para narrar por encima de un video
+// que quedo sin audio o con el audio dañado. Reutiliza la misma mezcla con
+// ganancia que MediaCapture para que el volumen no quede bajo.
+class AudioCapture {
+  constructor() {
+    this.recorder = null;
+    this.chunks = [];
+    this.stream = null;
+    this.micStream = null;
+    this.audioContext = null;
+  }
+
+  async start() {
+    this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const { track, audioContext } = mezclarConGanancia(this.micStream.getAudioTracks());
+    this.audioContext = audioContext;
+    this.stream = new MediaStream([track]);
+
+    this.chunks = [];
+    const candidates = ['audio/webm;codecs=opus', 'audio/webm'];
+    const mime = candidates.find(c => window.MediaRecorder && MediaRecorder.isTypeSupported(c)) || '';
+    this.recorder = new MediaRecorder(this.stream, mime ? { mimeType: mime } : {});
+    this.recorder.ondataavailable = (e) => { if (e.data && e.data.size) this.chunks.push(e.data); };
+    this.recorder.start(500);
+  }
+
+  stop() {
+    return new Promise((resolve) => {
+      if (!this.recorder) return resolve(null);
+      this.recorder.onstop = () => {
+        const blob = new Blob(this.chunks, { type: this.recorder.mimeType || 'audio/webm' });
+        this._cleanupTracks();
+        resolve(blob);
+      };
+      if (this.recorder.state !== 'inactive') this.recorder.stop();
+      else {
+        const blob = new Blob(this.chunks, { type: 'audio/webm' });
+        this._cleanupTracks();
+        resolve(blob);
+      }
+    });
+  }
+
+  _cleanupTracks() {
+    if (this.micStream) this.micStream.getTracks().forEach(t => t.stop());
+    if (this.audioContext) { this.audioContext.close(); this.audioContext = null; }
+  }
+}

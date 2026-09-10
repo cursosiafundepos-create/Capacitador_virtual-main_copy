@@ -190,6 +190,36 @@ const Api = {
     if (!r.ok) throw new Error('No se pudo consultar la transcripcion');
     return r.json();
   },
+  // Sube una narracion grabada aparte (audio solo) y la combina con un video
+  // ya existente en el paso, reemplazando su audio. Se usa para videos sin
+  // audio o con el audio dañado, asi el resultado se puede transcribir con
+  // el mismo flujo de siempre. onEstado(mensaje) es opcional, igual que en uploadMedia.
+  async reemplazarAudioDeVideo(slug, videoNombre, audioBlob, onEstado) {
+    const audioRes = await Api.uploadMedia(slug, audioBlob, `narracion-${Date.now()}.webm`, onEstado);
+    const r = await fetch(`/api/tramites/${encodeURIComponent(slug)}/media/${encodeURIComponent(videoNombre)}/reemplazar-audio`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...adminHeaders() },
+      body: JSON.stringify({ audioNombre: audioRes.nombre })
+    });
+    await checkAdminAuth(r);
+    if (!r.ok) throw new Error((await r.json()).error || 'No se pudo iniciar el reemplazo de audio');
+
+    const maxIntentos = 200; // ~10 minutos a 3s cada uno
+    for (let i = 0; i < maxIntentos; i++) {
+      if (onEstado) onEstado(i === 0 ? 'Combinando la narración con el video...' : `Combinando narración... (${i * 3}s)`);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      let er;
+      try {
+        er = await fetch(`/api/tramites/${encodeURIComponent(slug)}/media/${encodeURIComponent(videoNombre)}/reemplazar-audio/estado`, { headers: adminHeaders() });
+      } catch (e) { continue; }
+      if (!er.ok) continue;
+      const job = await er.json();
+      if (!job.done) continue;
+      if (job.error) throw new Error(job.error);
+      return job;
+    }
+    throw new Error('El reemplazo de audio está tardando demasiado. Probá de nuevo en unos minutos.');
+  },
   async listManuales() {
     const r = await fetch('/api/manuales');
     return r.json();

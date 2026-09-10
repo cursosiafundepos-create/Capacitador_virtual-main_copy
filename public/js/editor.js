@@ -683,6 +683,9 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
   const btnDescargarTranscripcionPaso = stepEl.querySelector('[data-transcripcion-descargar]');
   const btnDictar = stepEl.querySelector('[data-accion="dictar"]');
   const dictadoIndicador = stepEl.querySelector('[data-dictado-indicador]');
+  const btnNarrar = stepEl.querySelector('[data-accion="narrar"]');
+  const btnDetenerNarracion = stepEl.querySelector('[data-accion="detener-narracion"]');
+  const narracionIndicador = stepEl.querySelector('[data-narracion-indicador]');
   const rte = stepEl.querySelector('[data-texto]');
   const allCaptureBtns = [btnPantalla, btnCamara, btnShot];
 
@@ -691,7 +694,9 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
   }
 
   function actualizarBotonTranscribir() {
-    btnTranscribirPaso.disabled = !nombreArchivoPaso();
+    const tieneVideo = !!nombreArchivoPaso();
+    btnTranscribirPaso.disabled = !tieneVideo;
+    btnNarrar.disabled = !tieneVideo;
   }
 
   const transcriptorPaso = crearTranscriptor({
@@ -728,6 +733,7 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
     btnPausar.innerHTML = '<span class="msym" style="font-size:16px">pause_circle</span> Pausar';
     btnDetener.hidden = !on;
     allCaptureBtns.forEach(b => b.disabled = on);
+    btnNarrar.disabled = on || !nombreArchivoPaso();
   }
 
   function setPausado(paused) {
@@ -802,6 +808,65 @@ function bindCapture(stepEl, paso, stage, annotator, capture) {
     if (!blob || !blob.size) return;
     await intentarSubirGrabacion(blob, `paso-${Date.now()}.webm`);
   });
+
+  // Narracion: graba solo el microfono mientras se reproduce el video del
+  // paso desde el inicio, y al terminar reemplaza el audio de ese video en
+  // el servidor. Pensado para videos que quedaron sin audio o con el audio
+  // dañado, para poder transcribirlos igual con el boton de siempre.
+  const audioCapture = new AudioCapture();
+  let onVideoEnded = null;
+
+  function setNarrando(on) {
+    btnNarrar.hidden = on;
+    btnDetenerNarracion.hidden = !on;
+    narracionIndicador.classList.toggle('on', on);
+    allCaptureBtns.forEach(b => b.disabled = on);
+    btnFrame.disabled = on;
+  }
+
+  async function finalizarNarracion() {
+    const videoEl = stage.querySelector('video');
+    if (videoEl) {
+      if (onVideoEnded) videoEl.removeEventListener('ended', onVideoEnded);
+      videoEl.pause();
+      videoEl.muted = false;
+    }
+    onVideoEnded = null;
+    setNarrando(false);
+
+    const blob = await audioCapture.stop();
+    if (!blob || !blob.size) return;
+    const nombreVideo = nombreArchivoPaso();
+    if (!nombreVideo) return;
+    try {
+      const job = await Api.reemplazarAudioDeVideo(DOC.id, nombreVideo, blob, (msg) => toast(msg));
+      paso.media = { tipo: 'video', src: job.src };
+      renderStageMedia(stage, paso);
+      actualizarBotonTranscribir();
+      toast('Audio reemplazado. Ya podés transcribir este video.');
+    } catch (e) {
+      toast(e.message, true);
+    }
+  }
+
+  btnNarrar.addEventListener('click', async () => {
+    const videoEl = stage.querySelector('video');
+    if (!videoEl) { toast('Este paso no tiene un video cargado', true); return; }
+    try {
+      await audioCapture.start();
+    } catch (e) {
+      toast('No se pudo acceder al micrófono: ' + e.message, true);
+      return;
+    }
+    setNarrando(true);
+    videoEl.muted = true;
+    videoEl.currentTime = 0;
+    onVideoEnded = () => finalizarNarracion();
+    videoEl.addEventListener('ended', onVideoEnded);
+    videoEl.play().catch(() => { /* el usuario puede darle play manualmente */ });
+  });
+
+  btnDetenerNarracion.addEventListener('click', finalizarNarracion);
 
   btnShot.addEventListener('click', async () => {
     try {
