@@ -193,12 +193,14 @@ function grupoSeccionesHtml(tema, itemsTema) {
   if (sinGrupo.length) secciones.push({ grupo: null, items: sinGrupo });
   if (!secciones.length) return '';
 
+  const cl = folderColor(tema);
   return secciones.map(sec => {
     const key = `${tema}::${sec.grupo || '__sin__'}`;
     const abierta = !gruposColapsados.has(key);
     return `
       <section class="grupo-section${abierta ? '' : ' colapsada'}">
-        <div class="grupo-section-head" data-grupo-key="${escapeHtml(key)}">
+        <div class="grupo-section-head" data-grupo-key="${escapeHtml(key)}" style="--gs-c1:${cl.f1};--gs-c2:${cl.back}">
+          <span class="grupo-section-icon"><span class="msym">folder_open</span></span>
           <h3>${escapeHtml(sec.grupo || 'Sin grupo')}</h3>
           <span class="count">${sec.items.length}</span>
           <span class="msym grupo-section-chevron">expand_more</span>
