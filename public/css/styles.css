@@ -395,17 +395,27 @@ button { font-family: inherit; }
 .cat-section-head[data-cat="General"] .dot { background: var(--cat-general); }
 
 /* Trámites de un tema agrupados por grupo (subcategoría) en secciones
-   plegables, en vez de repetir el grupo como etiqueta en cada ficha. */
-.grupo-section { margin-bottom: 18px; }
+   plegables, en vez de repetir el grupo como etiqueta en cada ficha.
+   Mismo estilo de acordeón animado que usan las Evaluaciones (.acordeon-head),
+   coloreado con el color del tema al que pertenece cada grupo. */
+.grupo-section { margin-bottom: 14px; }
 .grupo-section:last-child { margin-bottom: 0; }
 .grupo-section-head {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-  cursor: pointer; user-select: none; padding: 6px 2px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  cursor: pointer; user-select: none; border-radius: 14px; padding: 11px 16px;
+  background: linear-gradient(135deg, var(--gs-c1, var(--azul)), var(--gs-c2, var(--azul-osc)));
+  box-shadow: var(--shadow); transition: transform .2s ease, box-shadow .2s ease;
 }
-.grupo-section-head h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--text-dim); }
-.grupo-section-head .count { font-size: 11px; font-weight: 700; color: var(--text-dim); background: var(--surface-alt); border-radius: 999px; padding: 2px 9px; }
-.grupo-section-chevron { margin-left: auto; color: var(--text-dim); transition: transform .2s ease; font-size: 20px; }
+.grupo-section-head:hover { transform: translateY(-2px) scale(1.01); box-shadow: var(--shadow-lg); }
+.grupo-section-head h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: #fff; }
+.grupo-section-head .count { font-size: 11px; font-weight: 700; color: #fff; background: rgba(255,255,255,.28); border-radius: 999px; padding: 2px 9px; }
+.grupo-section-chevron { margin-left: auto; color: #fff; transition: transform .2s ease; font-size: 20px; }
 .grupo-section:not(.colapsada) .grupo-section-chevron { transform: rotate(180deg); }
+.grupo-section-icon {
+  width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,.22);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.grupo-section-icon .msym { color: #fff; font-size: 15px; }
 
 /* Encabezados de acordeon animados (Evaluaciones) */
 .acordeon-head {
