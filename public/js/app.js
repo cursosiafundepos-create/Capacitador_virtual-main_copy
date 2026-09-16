@@ -2,10 +2,9 @@ let TRAMITES = [];
 let CATEGORIAS = [];
 let GRUPOS = {}; // { tema: [grupo, grupo, ...] }
 let temaActivo = null; // null = ningún tema abierto todavía; '' = "Todos" abierto explícitamente
-// Claves "tema::grupo" de las secciones de grupo que el usuario colapsó a
-// mano. Vacío = todas abiertas por defecto (para no esconder trámites que
-// alguien busca sin que lo pida explícitamente).
-const gruposColapsados = new Set();
+// Claves "tema::grupo" de las secciones de grupo que el usuario abrió a
+// mano. Vacío = todas cerradas por defecto al entrar a un tema.
+const gruposAbiertos = new Set();
 
 async function init() {
   const data = await Api.listTramites();
@@ -196,7 +195,7 @@ function grupoSeccionesHtml(tema, itemsTema) {
   const cl = folderColor(tema);
   return secciones.map(sec => {
     const key = `${tema}::${sec.grupo || '__sin__'}`;
-    const abierta = !gruposColapsados.has(key);
+    const abierta = gruposAbiertos.has(key);
     return `
       <section class="grupo-section${abierta ? '' : ' colapsada'}">
         <div class="grupo-section-head" data-grupo-key="${escapeHtml(key)}" style="--gs-c1:${cl.f1};--gs-c2:${cl.back}">
@@ -215,8 +214,8 @@ function bindGrupoSecciones(container) {
   container.querySelectorAll('.grupo-section-head').forEach(head => {
     head.addEventListener('click', () => {
       const key = head.dataset.grupoKey;
-      if (gruposColapsados.has(key)) gruposColapsados.delete(key);
-      else gruposColapsados.add(key);
+      if (gruposAbiertos.has(key)) gruposAbiertos.delete(key);
+      else gruposAbiertos.add(key);
       render();
     });
   });
