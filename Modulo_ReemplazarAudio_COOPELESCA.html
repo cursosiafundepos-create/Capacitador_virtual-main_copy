@@ -1,0 +1,179 @@
+<!--
+====================================================================
+MÓDULO: Reemplazar audio de un video (doblaje/narración nueva)
+COOPELESCA — extraído del Grabador de Capacitación
+====================================================================
+
+QUÉ HACE
+Permite grabar una narración nueva con el micrófono mientras un
+<video> ya cargado se reproduce en silencio, y sustituye por
+completo su pista de audio, generando un nuevo archivo .webm.
+
+REQUISITOS EN TU PROYECTO
+1. Debes tener un elemento <video id="preview"> con un video YA
+   CARGADO (por ejemplo video.src = URL.createObjectURL(unBlob)).
+   Si tu <video> tiene otro id, cambia todas las apariciones de
+   "preview" en el JS de abajo por el id real que uses.
+2. Debes tener en algún lugar de tu código dos variables donde
+   guardas el blob y la URL del video "de trabajo" actual
+   (aquí se llaman videoBlob y videoBlobUrl). Si ya tienes tus
+   propias variables con otro nombre, renómbralas en el JS.
+3. Navegador Chrome o Edge, y el archivo debe abrirse como HTML
+   local o servido (no dentro de un iframe con restricciones).
+
+CÓMO INTEGRARLO
+1. Copia el bloque HTML de abajo donde quieras que aparezca el
+   botón dentro de tu interfaz (normalmente cerca del <video>).
+2. Copia el bloque CSS dentro de tu <style> (o a un .css aparte).
+3. Copia el bloque JS dentro de tu <script> (o a un .js aparte
+   que cargues con <script src="reemplazar-audio.js"></script>).
+4. Al final del JS, conecta los botones con addEventListener
+   (ver la última sección "CONEXIÓN DE BOTONES").
+
+DÓNDE GUARDAR ESTE ARCHIVO EN TU REPOSITORIO DE GIT
+Sugerido: guárdalo tal cual (sin integrarlo) dentro de una carpeta
+de referencia, por ejemplo:
+    /docs/modulos-referencia/Modulo_ReemplazarAudio_COOPELESCA.html
+o, si separas el JS en su propio archivo dentro de tu estructura
+de código real, algo como:
+    /js/reemplazar-audio.js
+junto a tus demás módulos JS del capacitador (donde sea que
+guardes hoy el código de grabación o de video).
+====================================================================
+-->
+
+<!-- ============ 1) HTML — pega esto donde quieras el botón ============ -->
+<div class="card" id="stepDub">
+  <h2>Reemplazar audio</h2>
+  <div class="hint">
+    Graba una narración nueva con tu micrófono mientras el video se
+    reproduce (silenciado) y sustituye por completo el audio original.
+    El proceso reproduce el video completo en tiempo real — no cierres
+    la pestaña ni la minimices mientras corre.
+  </div>
+  <div class="row">
+    <button id="btnStartDub">🎙 Grabar audio nuevo sobre el video</button>
+    <button id="btnStopDub" class="hidden">■ Detener y usar lo grabado</button>
+  </div>
+  <progress id="dubProgress" value="0" max="100" class="hidden" style="width:100%;margin-top:10px;"></progress>
+  <div id="dubStatus" style="font-size:13px;margin-top:8px;"></div>
+</div>
+
+
+<!-- ============ 2) CSS — pega esto dentro de tu <style> ============ -->
+<style>
+  .hidden{ display:none !important; }
+  #dubStatus.error{ color:#c0392b; font-weight:600; }
+</style>
+
+
+<script>
+/* ============ 3) JS — pega esto dentro de tu <script> ============ */
+
+// --- Variables que tu proyecto ya debería tener (ajusta si difieren) ---
+// let videoBlob, videoBlobUrl;   // <- el video de trabajo actual
+
+let dubMediaRecorder = null;
+let dubMicStream = null;
+let dubActive = false;
+let dubChunks = [];
+
+function setDubStatus(msg, isError){
+  const el = document.getElementById('dubStatus');
+  el.textContent = msg;
+  el.className = isError ? 'error' : '';
+}
+
+async function startDubRecording(){
+  const video = document.getElementById('preview'); // <- ajusta el id si tu <video> se llama distinto
+  if (!video.src){
+    setDubStatus('Primero debe haber un video cargado.', true);
+    return;
+  }
+  if (!video.captureStream && !video.mozCaptureStream){
+    setDubStatus('Este navegador no soporta esta función (captureStream). Usa Chrome o Edge.', true);
+    return;
+  }
+
+  try{
+    dubMicStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  }catch(err){
+    setDubStatus('No se pudo acceder al micrófono: ' + err.message, true);
+    return;
+  }
+
+  const vidStream = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+  const videoTrack = vidStream.getVideoTracks()[0];
+  const combined = new MediaStream([videoTrack, dubMicStream.getAudioTracks()[0]]);
+
+  let mimeType = 'video/webm;codecs=vp9,opus';
+  if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm;codecs=vp8,opus';
+  if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
+
+  dubChunks = [];
+  dubMediaRecorder = new MediaRecorder(combined, { mimeType });
+  dubMediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) dubChunks.push(e.data); };
+  dubMediaRecorder.onstop = finishDubRecording;
+
+  video.muted = true;
+  video.currentTime = 0;
+  await new Promise(r => { video.onseeked = r; });
+
+  dubActive = true;
+  document.getElementById('btnStartDub').classList.add('hidden');
+  document.getElementById('btnStopDub').classList.remove('hidden');
+  document.getElementById('dubProgress').classList.remove('hidden');
+  setDubStatus('Grabando narración nueva… habla ahora. El video corre en silencio de fondo.', false);
+
+  dubMediaRecorder.start(500);
+  await video.play();
+
+  video.addEventListener('timeupdate', updateDubProgress);
+  video.addEventListener('ended', stopDubRecording, { once: true });
+}
+
+function updateDubProgress(){
+  const video = document.getElementById('preview');
+  if (video.duration) document.getElementById('dubProgress').value = Math.round((video.currentTime/video.duration)*100);
+}
+
+function stopDubRecording(){
+  if (!dubActive) return;
+  dubActive = false;
+  const video = document.getElementById('preview');
+  video.removeEventListener('timeupdate', updateDubProgress);
+  video.pause();
+  if (dubMediaRecorder && dubMediaRecorder.state !== 'inactive') dubMediaRecorder.stop();
+  else finishDubRecording();
+}
+
+function finishDubRecording(){
+  const video = document.getElementById('preview');
+  if (dubMicStream) dubMicStream.getTracks().forEach(t => t.stop());
+  video.muted = false;
+  document.getElementById('btnStartDub').classList.remove('hidden');
+  document.getElementById('btnStopDub').classList.add('hidden');
+  document.getElementById('dubProgress').classList.add('hidden');
+
+  if (!dubChunks.length){
+    setDubStatus('No se capturó audio nuevo. Intenta de nuevo.', true);
+    return;
+  }
+
+  const newBlob = new Blob(dubChunks, { type: dubMediaRecorder.mimeType || 'video/webm' });
+
+  // --- Aquí se reemplaza el video "de trabajo" de tu proyecto ---
+  // Ajusta estas líneas a como tu proyecto maneje el blob/URL del video:
+  if (typeof videoBlobUrl !== 'undefined' && videoBlobUrl) URL.revokeObjectURL(videoBlobUrl);
+  videoBlob = newBlob;
+  videoBlobUrl = URL.createObjectURL(newBlob);
+  video.src = videoBlobUrl;
+  video.load();
+
+  setDubStatus('✅ Audio reemplazado (' + (newBlob.size/1024/1024).toFixed(1) + ' MB). El video ahora tiene la narración nueva.', false);
+}
+
+/* ============ CONEXIÓN DE BOTONES — pega esto también ============ */
+document.getElementById('btnStartDub').addEventListener('click', startDubRecording);
+document.getElementById('btnStopDub').addEventListener('click', stopDubRecording);
+</script>
